@@ -27,7 +27,6 @@
       background-color: var(--bg-color);
     }
 
-    /* Top Navigation */
     .navbar {
       background-color: var(--header-bg);
       color: white;
@@ -42,7 +41,6 @@
     .navbar-title { display: flex; align-items: center; gap: 8px; }
     .heart-icon { color: #e53935; font-size: 22px; }
 
-    /* White Cards Container */
     .card-box {
       background: #ffffff;
       margin: 12px;
@@ -59,7 +57,6 @@
       margin-bottom: 12px;
     }
 
-    /* Buttons */
     .quick-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -94,7 +91,6 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
 
-    /* Zodiac Grid Header */
     .grid-header-title {
       background-color: var(--section-header);
       color: white;
@@ -114,7 +110,6 @@
       margin-bottom: 15px;
     }
 
-    /* Circles Grid */
     .zodiac-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -148,7 +143,6 @@
       font-size: 14px;
     }
 
-    /* Exact Icon Colors */
     .c-purple { background-color: #7b1fa2; }
     .c-red { background-color: #d32f2f; }
     .c-teal { background-color: #00796b; }
@@ -161,7 +155,6 @@
     .c-cyan { background-color: #0097a7; }
     .c-lightblue { background-color: #0288d1; }
 
-    /* Details Page */
     #detail-page { display: none; }
     .back-btn {
       display: inline-block;
@@ -213,15 +206,14 @@
       <span style="font-size: 22px; cursor:pointer;">☰</span>
     </div>
 
-    <!-- Main View -->
     <div id="main-page">
       <div class="card-box">
         <div class="box-title">:: خيارات سريعة ::</div>
         <div class="quick-grid">
           <button class="btn btn-green">اسمك بصورة</button>
           <button class="btn btn-blue">حالات و صور</button>
-
-          <button class="btn btn-orange">معرفة برجك</button>          <button class="btn btn-pink">مقياس الحب</button>
+          <button class="btn btn-pink">مقياس الحب</button>
+          <button class="btn btn-orange">معرفة برجك</button>
           <button class="btn btn-teal">توافق الابراج</button>
         </div>
         <button class="btn btn-red">❄️ توقعات الأبراج</button>
@@ -232,54 +224,54 @@
         <div class="grid-subtitle">يتم تحديث تحليلات الابراج بشكل يومي</div>
 
         <div class="zodiac-grid">
-          <div class="zodiac-item" onclick="openZodiac('aries')">
+          <div class="zodiac-item" onclick="openZodiac('aries', 'برج الحمل')">
             <div class="circle c-purple">🌙</div>
             <div class="zodiac-name">برج الحمل</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('taurus')">
+          <div class="zodiac-item" onclick="openZodiac('taurus', 'برج الثور')">
             <div class="circle c-red">⚖️</div>
             <div class="zodiac-name">برج الثور</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('gemini')">
+          <div class="zodiac-item" onclick="openZodiac('gemini', 'برج الجوزاء')">
             <div class="circle c-teal" style="font-family: sans-serif; font-weight: bold;">2</div>
             <div class="zodiac-name">برج الجوزاء</div>
           </div>
 
-          <div class="zodiac-item" onclick="openZodiac('cancer')">
+          <div class="zodiac-item" onclick="openZodiac('cancer', 'برج السرطان')">
             <div class="circle c-blue">🌊</div>
             <div class="zodiac-name">برج السرطان</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('leo')">
+          <div class="zodiac-item" onclick="openZodiac('leo', 'برج الاسد')">
             <div class="circle c-orange">☀️</div>
             <div class="zodiac-name">برج الاسد</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('virgo')">
+          <div class="zodiac-item" onclick="openZodiac('virgo', 'برج العذراء')">
             <div class="circle c-green">👤</div>
             <div class="zodiac-name">برج العذراء</div>
           </div>
 
-          <div class="zodiac-item" onclick="openZodiac('libra')">
+          <div class="zodiac-item" onclick="openZodiac('libra', 'برج الميزان')">
             <div class="circle c-teal">⚖️</div>
             <div class="zodiac-name">برج الميزان</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('scorpio')">
+          <div class="zodiac-item" onclick="openZodiac('scorpio', 'برج العقرب')">
             <div class="circle c-navy">🦂</div>
             <div class="zodiac-name">برج العقرب</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('sagittarius')">
+          <div class="zodiac-item" onclick="openZodiac('sagittarius', 'برج القوس')">
             <div class="circle c-deeporange">🏹</div>
             <div class="zodiac-name">برج القوس</div>
           </div>
 
-          <div class="zodiac-item" onclick="openZodiac('capricorn')">
+          <div class="zodiac-item" onclick="openZodiac('capricorn', 'برج الجدي')">
             <div class="circle c-grey">📐</div>
             <div class="zodiac-name">برج الجدي</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('aquarius')">
+          <div class="zodiac-item" onclick="openZodiac('aquarius', 'برج الدلو')">
             <div class="circle c-cyan">💧</div>
             <div class="zodiac-name">برج الدلو</div>
           </div>
-          <div class="zodiac-item" onclick="openZodiac('pisces')">
+          <div class="zodiac-item" onclick="openZodiac('pisces', 'برج الحوت')">
             <div class="circle c-lightblue">⛵</div>
             <div class="zodiac-name">برج الحوت</div>
           </div>
@@ -287,7 +279,6 @@
       </div>
     </div>
 
-    <!-- Single Page Zodiac View -->
     <div id="detail-page" style="padding: 12px;">
       <div class="back-btn" onclick="closeZodiac()">➔ رجوع</div>
       <div class="detail-card">
@@ -328,17 +319,20 @@
       .then(res => res.json())
       .then(data => { allData = data; });
 
-    function openZodiac(key) {
-      if (!allData[key]) return;
+    function openZodiac(key, fallbackName) {
+      const item = allData[key] || {};
       
-      const item = allData[key];
-      document.getElementById('z-title').innerText = item.name;
-      document.getElementById('z-general').innerText = item.general;
-      document.getElementById('z-financial').innerText = item.financial;
-      document.getElementById('z-emotional').innerText = item.emotional;
-      document.getElementById('z-num').innerText = item.lucky_num;
-      document.getElementById('z-compat').innerText = item.compatible;
-      document.getElementById('z-love').innerText = item.love_rate;
+      const isObject = typeof item === 'object';
+      const name = isObject ? (item.name || fallbackName) : fallbackName;
+      const general = isObject ? (item.general || item) : item;
+
+      document.getElementById('z-title').innerText = name;
+      document.getElementById('z-general').innerText = general || "طاقة إيجابية يومية تميز يومك، تفاءل بالخير.";
+      document.getElementById('z-financial').innerText = item.financial || "الوضع المالي مستقر وهناك فرص جيدة قادمة.";
+      document.getElementById('z-emotional').innerText = item.emotional || "الأجواء العاطفية هادئة وتفاهم ممتاز مع الشريك.";
+      document.getElementById('z-num').innerText = item.lucky_num || Math.floor(Math.random() * 90 + 5);
+      document.getElementById('z-compat').innerText = item.compatible || "برج الثور";
+      document.getElementById('z-love').innerText = item.love_rate || "85%";
 
       document.getElementById('main-page').style.display = 'none';
       document.getElementById('detail-page').style.display = 'block';
