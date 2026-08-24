@@ -195,6 +195,21 @@
     }
 
     .stat-title { font-weight: bold; color: #111; }
+
+    /* إخفاء شارة Netlify */
+    [data-netlify-badge], 
+    .netlify-badge, 
+    #netlify-badge,
+    iframe[src*="netlify"], 
+    div[class*="netlify"],
+    net-lify-drawer,
+    #net-lify-drawer,
+    div[style*="fixed"][style*="bottom"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
   </style>
 </head>
 <body>
