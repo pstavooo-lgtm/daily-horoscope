@@ -2,17 +2,17 @@ name: Daily Horoscope Generator
 
 on:
   schedule:
-    - cron: '0 0 * * *' # يعمل يومياً الساعة 12 ليلاً تلقائياً
-  workflow_dispatch: # يتيح لك تشغيله يدوياً لتجربة الموقع فوراً
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - run: node generate.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
