@@ -25,11 +25,11 @@ async function getHoroscope() {
   "pisces": "توقعات الحوت..."
 }`;
 
-  // استخدام الموديل القياسي المباشر
-  const modelUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // استخدام الرابط المباشر للنسخة v1 المستقرة
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
   try {
-    const response = await fetch(modelUrl, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -39,7 +39,7 @@ async function getHoroscope() {
 
     const data = await response.json();
     
-    if (!data.candidates) {
+    if (!data.candidates || !data.candidates[0]) {
       console.error("Response error:", JSON.stringify(data));
       process.exit(1);
     }
