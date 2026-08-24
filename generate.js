@@ -2,14 +2,14 @@ const fs = require('fs');
 
 async function getHoroscope() {
   const apiKey = process.env.GEMINI_API_KEY;
+  
   if (!apiKey) {
-    console.error("GEMINI_API_KEY is not defined.");
+    console.error("خطأ: لم يتم العثور على المفتاح GEMINI_API_KEY داخل الـ Secrets!");
     process.exit(1);
   }
 
-  const prompt = `اكتب توقعات الأبراج اليومية الـ 12 باللغة العربية المشوقة واللطيفة.
-ضع التوقعات في صيغة JSON حصرية وبدون أي مقدمات أو علامات مقتبسة، فقط النتيجة JSON الصافية.
-التركيب المطلوب:
+  const prompt = `اكتب توقعات الأبراج اليومية الـ 12 باللغة العربية المشوقة.
+ضع التوقعات في صيغة JSON حصرية بدون مقدمات أو علامات مقتبسة:
 {
   "aries": "توقعات الحمل...",
   "taurus": "توقعات الثور...",
@@ -35,13 +35,19 @@ async function getHoroscope() {
     });
 
     const data = await response.json();
+    
+    if (!data.candidates) {
+      console.error("Response error:", JSON.stringify(data));
+      process.exit(1);
+    }
+
     let text = data.candidates[0].content.parts[0].text;
     text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
 
     fs.writeFileSync('data.json', text);
-    console.log('Successfully generated data.json!');
+    console.log('تم إنشاء data.json بنجاح!');
   } catch (err) {
-    console.error('Error generating horoscope:', err);
+    console.error('Error:', err);
     process.exit(1);
   }
 }
