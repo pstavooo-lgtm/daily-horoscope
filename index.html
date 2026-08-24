@@ -132,12 +132,14 @@
       justify-content: center;
       align-items: center;
       box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      overflow: hidden;
     }
 
-    .circle svg {
+    .circle img {
       width: 48px;
       height: 48px;
-      fill: #ffffff;
+      object-fit: contain;
+      filter: brightness(0) invert(1); /* تحويل الأيقونات إلى اللون الأبيض النقي */
     }
 
     .zodiac-name {
@@ -147,7 +149,6 @@
       font-size: 14px;
     }
 
-    /* ألوان خلفيات الأبراج المأخوذة من الصورة بالضبط */
     .c-aries { background-color: #6b2853; }
     .c-taurus { background-color: #b72d2d; }
     .c-gemini { background-color: #008080; }
@@ -202,7 +203,6 @@
 
     .stat-title { font-weight: bold; color: #111; }
 
-    /* إخفاء شارة Netlify */
     [data-netlify-badge], 
     .netlify-badge, 
     #netlify-badge,
@@ -248,7 +248,7 @@
           <!-- الحمل -->
           <div class="zodiac-item" onclick="openZodiac('aries', 'برج الحمل')">
             <div class="circle c-aries">
-              <svg viewBox="0 0 24 24"><path d="M20,4C18,2 15,2 13.5,3.5C12.7,4.3 12,5.5 12,7C12,5.5 11.3,4.3 10.5,3.5C9,2 6,2 4,4C2,6 2,9 3.5,11C4.3,12 6,13 8,13C9,13 10,12.5 10.5,12C10.8,11.7 11,11 11,10H13C13,11 13.2,11.7 13.5,12C14,12.5 15,13 16,13C18,13 19.7,12 20.5,11C22,9 22,6 20,4M7.5,11C6.1,11 5,9.9 5,8.5C5,7.1 6.1,6 7.5,6C8.2,6 8.8,6.3 9.2,6.8C9.7,7.3 10,8 10,8.7C9.8,10 8.8,11 7.5,11M16.5,11C15.2,11 14.2,10 14,8.7C14,8 14.3,7.3 14.8,6.8C15.2,6.3 15.8,6 16.5,6C17.9,6 19,7.1 19,8.5C19,9.9 17.9,11 16.5,11Z"/><path d="M11 9h2v12h-2z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/aries.png" alt="الحمل">
             </div>
             <div class="zodiac-name">برج الحمل</div>
           </div>
@@ -256,7 +256,7 @@
           <!-- الثور -->
           <div class="zodiac-item" onclick="openZodiac('taurus', 'برج الثور')">
             <div class="circle c-taurus">
-              <svg viewBox="0 0 24 24"><path d="M12,10A5,5 0 0,0 7,15A5,5 0 0,0 12,20A5,5 0 0,0 17,15A5,5 0 0,0 12,10M12,18A3,3 0 0,1 9,15A3,3 0 0,1 12,12A3,3 0 0,1 15,15A3,3 0 0,1 12,18M19.5,4.5C18.1,3.1 16,3 14.8,4.2C13.9,5.1 13.5,6.4 13.7,7.6C13.2,7.2 12.6,7 12,7C11.4,7 10.8,7.2 10.3,7.6C10.5,6.4 10.1,5.1 9.2,4.2C8,3 5.9,3.1 4.5,4.5C3.1,5.9 3,8 4.2,9.2C5.1,10.1 6.4,10.5 7.6,10.3C7.2,10.8 7,11.4 7,12H9A3,3 0 0,1 12,9A3,3 0 0,1 15,12H17C17,11.4 16.8,10.8 16.4,10.3C17.6,10.5 18.9,10.1 19.8,9.2C21,8 20.9,5.9 19.5,4.5Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/taurus.png" alt="الثور">
             </div>
             <div class="zodiac-name">برج الثور</div>
           </div>
@@ -264,7 +264,7 @@
           <!-- الجوزاء -->
           <div class="zodiac-item" onclick="openZodiac('gemini', 'برج الجوزاء')">
             <div class="circle c-gemini">
-              <svg viewBox="0 0 24 24"><path d="M19,3H5V5C7.2,5 9,6.8 9,9V15C9,17.2 7.2,19 5,19V21H19V19C16.8,19 15,17.2 15,15V9C15,6.8 16.8,5 19,5V3M11,19H13V5H11V19Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/gemini.png" alt="الجوزاء">
             </div>
             <div class="zodiac-name">برج الجوزاء</div>
           </div>
@@ -272,7 +272,7 @@
           <!-- السرطان -->
           <div class="zodiac-item" onclick="openZodiac('cancer', 'برج السرطان')">
             <div class="circle c-cancer">
-              <svg viewBox="0 0 24 24"><path d="M12,4A5,5 0 0,0 7,9A5,5 0 0,0 12,14A5,5 0 0,0 17,9A5,5 0 0,0 12,4M12,12A3,3 0 0,1 9,9A3,3 0 0,1 12,6A3,3 0 0,1 15,9A3,3 0 0,1 12,12M12,10A5,5 0 0,0 17,15A5,5 0 0,0 12,20A5,5 0 0,0 7,15A5,5 0 0,0 12,10M12,18A3,3 0 0,1 15,15A3,3 0 0,1 12,12A3,3 0 0,1 9,15A3,3 0 0,1 12,18Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/cancer.png" alt="السرطان">
             </div>
             <div class="zodiac-name">برج السرطان</div>
           </div>
@@ -280,7 +280,7 @@
           <!-- الأسد -->
           <div class="zodiac-item" onclick="openZodiac('leo', 'برج الاسد')">
             <div class="circle c-leo">
-              <svg viewBox="0 0 24 24"><path d="M15,13C13.3,13 12,14.3 12,16C12,17.7 13.3,19 15,19C16.7,19 18,17.7 18,16C18,14.3 16.7,13 15,13M15,17C14.4,17 14,16.6 14,16C14,15.4 14.4,15 15,15C15.6,15 16,15.4 16,16C16,16.6 15.6,17 15,17M18,9C16.3,9 15,10.3 15,12C15,12.4 15.1,12.7 15.2,13C13.8,13 12.5,13.7 11.7,14.8C10.7,13.7 9.3,13 7.8,13C5.1,13 3,15.1 3,17.8C3,20.4 5.1,22.5 7.8,22.5C10.4,22.5 12.5,20.4 12.5,17.8C12.5,17.5 12.4,17.2 12.4,16.9C13,16.3 13.9,16 14.8,16.1C14.9,16.7 15.2,17.3 15.7,17.7C16.6,18.5 18,18.4 18.8,17.5C19.6,16.6 19.5,15.2 18.6,14.4C18.2,14.1 17.6,13.9 17.1,14C17,13.4 17,12.7 17.2,12.2C17.7,11.3 18.7,10.7 19.8,10.9C20.9,11.1 21.8,12 21.9,13.1C22,14.3 21.3,15.3 20.2,15.7L20.8,17.6C22.8,16.9 24.1,15 23.9,12.8C23.7,10.2 21.3,8.3 18.7,8.8C18.5,8.9 18.2,8.9 18,9Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/leo.png" alt="الأسد">
             </div>
             <div class="zodiac-name">برج الاسد</div>
           </div>
@@ -288,7 +288,7 @@
           <!-- العذراء -->
           <div class="zodiac-item" onclick="openZodiac('virgo', 'برج العذراء')">
             <div class="circle c-virgo">
-              <svg viewBox="0 0 24 24"><path d="M18,3A3,3 0 0,0 15,6V15A1,1 0 0,1 14,16A1,1 0 0,1 13,15V6A3,3 0 0,0 10,3A3,3 0 0,0 7,6V15A1,1 0 0,1 6,16A1,1 0 0,1 5,15V8H3V15A3,3 0 0,0 6,18A3,3 0 0,0 9,15V6A1,1 0 0,1 10,5A1,1 0 0,1 11,6V15A3,3 0 0,0 14,18A3,3 0 0,0 17,15V13.8C17.3,14.4 17.9,15 18.7,15.3L16.2,21H18.4L20.5,16.1C21.4,15.4 22,14.3 22,13V12A3,3 0 0,0 19,9H18V6A1,1 0 0,1 19,5A1,1 0 0,1 20,6V8H22V6A3,3 0 0,0 19,3H18M19,11A1,1 0 0,1 20,12V13A1,1 0 0,1 19,14A1,1 0 0,1 18,13V12A1,1 0 0,1 19,11Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/virgo.png" alt="العذراء">
             </div>
             <div class="zodiac-name">برج العذراء</div>
           </div>
@@ -296,7 +296,7 @@
           <!-- الميزان -->
           <div class="zodiac-item" onclick="openZodiac('libra', 'برج الميزان')">
             <div class="circle c-libra">
-              <svg viewBox="0 0 24 24"><path d="M12,5A3,3 0 0,1 15,8H18A6,6 0 0,0 12,2A6,6 0 0,0 6,8H9A3,3 0 0,1 12,5M2,13H22V11H2V13M2,19H22V17H2V19Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/libra.png" alt="الميزان">
             </div>
             <div class="zodiac-name">برج الميزان</div>
           </div>
@@ -304,7 +304,7 @@
           <!-- العقرب -->
           <div class="zodiac-item" onclick="openZodiac('scorpio', 'برج العقرب')">
             <div class="circle c-scorpio">
-              <svg viewBox="0 0 24 24"><path d="M18,3A3,3 0 0,0 15,6V15A1,1 0 0,1 14,16A1,1 0 0,1 13,15V6A3,3 0 0,0 10,3A3,3 0 0,0 7,6V15A1,1 0 0,1 6,16A1,1 0 0,1 5,15V8H3V15A3,3 0 0,0 6,18A3,3 0 0,0 9,15V6A1,1 0 0,1 10,5A1,1 0 0,1 11,6V15A3,3 0 0,0 14,18A3,3 0 0,0 17,15V10H19V15C19,15.6 19.2,16.1 19.6,16.5L17,19.1L18.4,20.5L21,17.9C21.4,18.3 21.9,18.5 22.5,18.5V16.5C22.2,16.5 21.9,16.4 21.7,16.2L20.8,15.3C20.9,15.2 21,15 21,14.8V10A3,3 0 0,0 18,7H17V6A1,1 0 0,1 18,5A1,1 0 0,1 19,6V8H21V6A3,3 0 0,0 18,3Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/scorpio.png" alt="العقرب">
             </div>
             <div class="zodiac-name">برج العقرب</div>
           </div>
@@ -312,7 +312,7 @@
           <!-- القوس -->
           <div class="zodiac-item" onclick="openZodiac('sagittarius', 'برج القوس')">
             <div class="circle c-sagittarius">
-              <svg viewBox="0 0 24 24"><path d="M14.59,2.59L17.17,5.17L12.41,9.93L14.07,11.59L18.83,6.83L21.41,9.41V2.59H14.59M2,13.59L3.41,12.17L8.17,16.93L10.59,14.5L9.17,13.09L10.59,11.67L12,13.09L13.41,11.67L12,10.26L13.41,8.84L14.83,10.26L16.24,8.84L14.83,7.43L16.24,6.01L17.66,7.43L19.07,6.01L17.66,4.6L19.07,3.18L20.48,4.6L21.9,3.18L20.48,1.76L21.9,0.34V2.59L19.41,5.09L17.99,3.67L16.58,5.09L15.16,3.67L13.75,5.09L12.33,3.67L10.92,5.09L9.5,3.67L8.09,5.09L6.67,3.67L5.26,5.09L3.84,3.67L2.43,5.09L1.01,3.67L2,13.59Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/sagittarius.png" alt="القوس">
             </div>
             <div class="zodiac-name">برج القوس</div>
           </div>
@@ -320,7 +320,7 @@
           <!-- الجدي -->
           <div class="zodiac-item" onclick="openZodiac('capricorn', 'برج الجدي')">
             <div class="circle c-capricorn">
-              <svg viewBox="0 0 24 24"><path d="M17,10A3,3 0 0,0 14,13V15.5C13.6,15.2 13.1,15 12.5,15C11.1,15 10,16.1 10,17.5C10,18.9 11.1,20 12.5,20C13.9,20 15,18.9 15,17.5V13A1,1 0 0,1 16,12A1,1 0 0,1 17,13V18A3,3 0 0,0 20,21A3,3 0 0,0 23,18V17H21V18A1,1 0 0,1 20,19A1,1 0 0,1 19,18V13A3,3 0 0,0 16,10H17M10,4A3,3 0 0,0 7,7V14A1,1 0 0,1 6,15A1,1 0 0,1 5,14V8H3V14A3,3 0 0,0 6,17A3,3 0 0,0 9,14V7A1,1 0 0,1 10,6A1,1 0 0,1 11,7V10H13V7A3,3 0 0,0 10,4Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/capricorn.png" alt="الجدي">
             </div>
             <div class="zodiac-name">برج الجدي</div>
           </div>
@@ -328,7 +328,7 @@
           <!-- الدلو -->
           <div class="zodiac-item" onclick="openZodiac('aquarius', 'برج الدلو')">
             <div class="circle c-aquarius">
-              <svg viewBox="0 0 24 24"><path d="M21,6L18,3L15,6L12,3L9,6L6,3L3,6V8.8L6,5.8L9,8.8L12,5.8L15,8.8L18,5.8L21,8.8V6M21,15L18,12L15,15L12,12L9,15L6,12L3,15V17.8L6,14.8L9,17.8L12,14.8L15,17.8L18,14.8L21,17.8V15Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/aquarius.png" alt="الدلو">
             </div>
             <div class="zodiac-name">برج الدلو</div>
           </div>
@@ -336,7 +336,7 @@
           <!-- الحوت -->
           <div class="zodiac-item" onclick="openZodiac('pisces', 'برج الحوت')">
             <div class="circle c-pisces">
-              <svg viewBox="0 0 24 24"><path d="M12,11C13.7,8.2 16.7,6.3 20.2,6C18.6,8.8 18.6,12.2 20.2,15C16.7,14.7 13.7,12.8 12,10V11M12,13C10.3,15.8 7.3,17.7 3.8,18C5.4,15.2 5.4,11.8 3.8,9C7.3,9.3 10.3,11.2 12,14V13M11,2H13V22H11V2Z"/></svg>
+              <img src="https://img.icons8.com/ios-filled/100/pisces.png" alt="الحوت">
             </div>
             <div class="zodiac-name">برج الحوت</div>
           </div>
