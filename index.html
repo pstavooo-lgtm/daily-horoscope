@@ -6,74 +6,61 @@
   <title>برجك أون لاين 👑</title>
   <style>
     :root {
-      --bg-color: #0b5d52;
-      --header-bg: #1c62b9;
+      --bg-color: #0d5c48;
+      --header-bg: #1e63b8;
       --card-bg: #ffffff;
-      --section-header-bg: #6e473b;
+      --section-header: #5d3d33;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: tahoma, arial, sans-serif; }
 
     body {
       background-color: var(--bg-color);
       display: flex;
       justify-content: center;
       min-height: 100vh;
-      padding-bottom: 20px;
     }
 
-    .container {
+    .app-container {
       width: 100%;
-      max-width: 480px;
+      max-width: 450px;
       background-color: var(--bg-color);
     }
 
-    /* Navbar */
+    /* Top Navigation */
     .navbar {
       background-color: var(--header-bg);
       color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
+      padding: 12px 15px;
       font-size: 20px;
       font-weight: bold;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    .navbar-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .navbar-title { display: flex; align-items: center; gap: 8px; }
+    .heart-icon { color: #e53935; font-size: 22px; }
 
-    .heart-icon {
-      color: #ff3b30;
-      font-size: 22px;
-    }
-
-    /* Main Section Card */
-    .main-card {
-      background: white;
-      margin: 15px;
-      padding: 15px;
+    /* White Cards Container */
+    .card-box {
+      background: #ffffff;
+      margin: 12px;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
 
-    .section-title {
+    .box-title {
       text-align: center;
+      font-size: 16px;
       font-weight: bold;
+      color: #222;
       margin-bottom: 12px;
-      color: #333;
     }
 
-    .quick-buttons {
+    /* Buttons */
+    .quick-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
@@ -81,54 +68,58 @@
     }
 
     .btn {
-      padding: 12px 8px;
+      padding: 12px 5px;
       border: none;
       border-radius: 8px;
       color: white;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 
     .btn-green { background-color: #4caf50; }
-    .btn-blue { background-color: #1976d2; }
-    .btn-pink { background-color: #d81b60; }
+    .btn-blue { background-color: #1e88e5; }
     .btn-orange { background-color: #ff9800; }
-    .btn-teal { background-color: #009688; grid-column: span 2; width: 60%; justify-self: center; }
-    .btn-red { background-color: #e53935; width: 100%; padding: 14px; font-size: 18px; border-radius: 20px; margin-top: 5px; }
-
-    /* Horoscope Grid Card */
-    .grid-card {
-      background: white;
-      margin: 15px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    .btn-pink { background-color: #d81b60; }
+    .btn-teal { background-color: #00897b; grid-column: span 2; width: 55%; justify-self: center; }
+    .btn-red { 
+      background-color: #e53935; 
+      width: 100%; 
+      padding: 14px; 
+      font-size: 19px; 
+      border-radius: 25px; 
+      margin-top: 5px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
 
-    .grid-header {
-      background-color: var(--section-header-bg);
+    /* Zodiac Grid Header */
+    .grid-header-title {
+      background-color: var(--section-header);
       color: white;
       text-align: center;
       padding: 10px;
       font-weight: bold;
       font-size: 15px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      margin: -12px -12px 10px -12px;
     }
 
     .grid-subtitle {
       text-align: center;
-      color: #777;
+      color: #666;
       font-size: 13px;
-      padding: 12px 0 5px 0;
+      margin-bottom: 15px;
     }
 
-    .horoscope-grid {
+    /* Circles Grid */
+    .zodiac-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px 10px;
-      padding: 15px;
-      text-align: center;
+      padding: 10px 5px;
     }
 
     .zodiac-item {
@@ -138,203 +129,223 @@
       cursor: pointer;
     }
 
-    .circle-icon {
-      width: 70px;
-      height: 70px;
+    .circle {
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
-      font-size: 28px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
-    }
-
-    .circle-icon:active {
-      transform: scale(0.95);
+      font-size: 32px;
+      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.25);
     }
 
     .zodiac-name {
       margin-top: 8px;
-      color: #e53935;
+      color: #d32f2f;
       font-weight: bold;
       font-size: 14px;
     }
 
-    /* Color classes for circles */
-    .c-purple { background-color: #8e24aa; }
-    .c-red { background-color: #e53935; }
-    .c-teal { background-color: #00897b; }
-    .c-blue { background-color: #1e88e5; }
-    .c-orange { background-color: #fb8c00; }
-    .c-green { background-color: #43a047; }
-    .c-darkblue { background-color: #1a237e; }
-    .c-deeporange { background-color: #f4511e; }
-    .c-slate { background-color: #37474f; }
-    .c-cyan { background-color: #00acc1; }
+    /* Exact Icon Colors */
+    .c-purple { background-color: #7b1fa2; }
+    .c-red { background-color: #d32f2f; }
+    .c-teal { background-color: #00796b; }
+    .c-blue { background-color: #1976d2; }
+    .c-orange { background-color: #f57c00; }
+    .c-green { background-color: #388e3c; }
+    .c-navy { background-color: #1a237e; }
+    .c-deeporange { background-color: #e64a19; }
+    .c-grey { background-color: #37474f; }
+    .c-cyan { background-color: #0097a7; }
     .c-lightblue { background-color: #0288d1; }
 
-    /* Horoscope View Page (Hidden by default) */
-    #detail-page {
-      display: none;
-      background: white;
-      margin: 15px;
-      border-radius: 12px;
-      padding: 20px;
-      min-height: 300px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
+    /* Details Page */
+    #detail-page { display: none; }
     .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      display: inline-block;
       background-color: var(--header-bg);
       color: white;
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: 20px;
-      text-decoration: none;
       font-weight: bold;
       cursor: pointer;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
-    .detail-title {
+    .detail-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    .detail-header {
       font-size: 22px;
-      color: var(--section-header-bg);
-      margin-bottom: 15px;
+      color: #b71c1c;
       text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
       border-bottom: 2px solid #eee;
       padding-bottom: 10px;
     }
 
-    .detail-text {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #333;
-      text-align: justify;
+    .stat-box {
+      background: #f8f9fa;
+      border-right: 4px solid var(--header-bg);
+      padding: 8px 12px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 14px;
     }
+
+    .stat-title { font-weight: bold; color: #111; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Header -->
+  <div class="app-container">
     <div class="navbar">
       <span class="heart-icon">❤️</span>
-      <div class="navbar-title">👑 برجك أون لاين</div>
-      <span style="font-size: 22px;">☰</span>
+      <div class="navbar-title">برجك اون لاين 👑</div>
+      <span style="font-size: 22px; cursor:pointer;">☰</span>
     </div>
 
     <!-- Main View -->
     <div id="main-page">
-      <!-- Quick Options Card -->
-      <div class="main-card">
-        <div class="section-title">:: خيارات سريعة ::</div>
-        <div class="quick-buttons">
+      <div class="card-box">
+        <div class="box-title">:: خيارات سريعة ::</div>
+        <div class="quick-grid">
           <button class="btn btn-green">اسمك بصورة</button>
           <button class="btn btn-blue">حالات و صور</button>
-          <button class="btn btn-pink">مقياس الحب</button>
-          <button class="btn btn-orange">معرفة برجك</button>
+
+          <button class="btn btn-orange">معرفة برجك</button>          <button class="btn btn-pink">مقياس الحب</button>
           <button class="btn btn-teal">توافق الابراج</button>
         </div>
         <button class="btn btn-red">❄️ توقعات الأبراج</button>
       </div>
 
-      <!-- Horoscope Grid Card -->
-      <div class="grid-card">
-        <div class="grid-header">:: الابراج اليومية - تطبيق برجك اون لاين ::</div>
+      <div class="card-box">
+        <div class="grid-header-title">:: الابراج اليومية - تطبيق برجك اون لاين ::</div>
         <div class="grid-subtitle">يتم تحديث تحليلات الابراج بشكل يومي</div>
-        
-        <div class="horoscope-grid">
-          <div class="zodiac-item" onclick="showHoroscope('aries', 'برج الحمل', '🌙')">
-            <div class="circle-icon c-purple">🌙</div>
+
+        <div class="zodiac-grid">
+          <div class="zodiac-item" onclick="openZodiac('aries')">
+            <div class="circle c-purple">🌙</div>
             <div class="zodiac-name">برج الحمل</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('taurus', 'برج الثور', '⚖️')">
-            <div class="circle-icon c-red">⚖️</div>
+          <div class="zodiac-item" onclick="openZodiac('taurus')">
+            <div class="circle c-red">⚖️</div>
             <div class="zodiac-name">برج الثور</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('gemini', 'برج الجوزاء', '2')">
-            <div class="circle-icon c-teal" style="font-weight: bold; font-family: sans-serif;">2</div>
+          <div class="zodiac-item" onclick="openZodiac('gemini')">
+            <div class="circle c-teal" style="font-family: sans-serif; font-weight: bold;">2</div>
             <div class="zodiac-name">برج الجوزاء</div>
           </div>
 
-          <div class="zodiac-item" onclick="showHoroscope('cancer', 'برج السرطان', '🌊')">
-            <div class="circle-icon c-blue">🌊</div>
+          <div class="zodiac-item" onclick="openZodiac('cancer')">
+            <div class="circle c-blue">🌊</div>
             <div class="zodiac-name">برج السرطان</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('leo', 'برج الاسد', '☀️')">
-            <div class="circle-icon c-orange">☀️</div>
+          <div class="zodiac-item" onclick="openZodiac('leo')">
+            <div class="circle c-orange">☀️</div>
             <div class="zodiac-name">برج الاسد</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('virgo', 'برج العذراء', '👤')">
-            <div class="circle-icon c-green">👤</div>
+          <div class="zodiac-item" onclick="openZodiac('virgo')">
+            <div class="circle c-green">👤</div>
             <div class="zodiac-name">برج العذراء</div>
           </div>
 
-          <div class="zodiac-item" onclick="showHoroscope('libra', 'برج الميزان', '⚖️')">
-            <div class="circle-icon c-teal">⚖️</div>
+          <div class="zodiac-item" onclick="openZodiac('libra')">
+            <div class="circle c-teal">⚖️</div>
             <div class="zodiac-name">برج الميزان</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('scorpio', 'برج العقرب', '🦂')">
-            <div class="circle-icon c-darkblue">🦂</div>
+          <div class="zodiac-item" onclick="openZodiac('scorpio')">
+            <div class="circle c-navy">🦂</div>
             <div class="zodiac-name">برج العقرب</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('sagittarius', 'برج القوس', '🏹')">
-            <div class="circle-icon c-deeporange">🏹</div>
+          <div class="zodiac-item" onclick="openZodiac('sagittarius')">
+            <div class="circle c-deeporange">🏹</div>
             <div class="zodiac-name">برج القوس</div>
           </div>
 
-          <div class="zodiac-item" onclick="showHoroscope('capricorn', 'برج الجدي', '📐')">
-            <div class="circle-icon c-slate">📐</div>
+          <div class="zodiac-item" onclick="openZodiac('capricorn')">
+            <div class="circle c-grey">📐</div>
             <div class="zodiac-name">برج الجدي</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('aquarius', 'برج الدلو', '💧')">
-            <div class="circle-icon c-cyan">💧</div>
+          <div class="zodiac-item" onclick="openZodiac('aquarius')">
+            <div class="circle c-cyan">💧</div>
             <div class="zodiac-name">برج الدلو</div>
           </div>
-          <div class="zodiac-item" onclick="showHoroscope('pisces', 'برج الحوت', '⛵')">
-            <div class="circle-icon c-lightblue">⛵</div>
+          <div class="zodiac-item" onclick="openZodiac('pisces')">
+            <div class="circle c-lightblue">⛵</div>
             <div class="zodiac-name">برج الحوت</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Detail View Page (Hidden by default) -->
-    <div id="detail-page">
-      <div class="back-btn" onclick="showMainPage()">➔ رجوع</div>
-      <div class="detail-title" id="zodiac-title">برج الحمل</div>
-      <div class="detail-text" id="zodiac-text">جاري تحميل التوقعات...</div>
+    <!-- Single Page Zodiac View -->
+    <div id="detail-page" style="padding: 12px;">
+      <div class="back-btn" onclick="closeZodiac()">➔ رجوع</div>
+      <div class="detail-card">
+        <div class="detail-header" id="z-title">برج...</div>
+        
+        <p id="z-general" style="margin-bottom: 15px; font-size: 15px;"></p>
+        
+        <div class="stat-box">
+          <span class="stat-title">💰 الجانب المالي والمهني:</span>
+          <p id="z-financial" style="margin-top: 3px;"></p>
+        </div>
+
+        <div class="stat-box">
+          <span class="stat-title">❤️ الجانب العاطفي:</span>
+          <p id="z-emotional" style="margin-top: 3px;"></p>
+        </div>
+
+        <div class="stat-box" style="border-right-color: #e53935;">
+          <span class="stat-title">✨ رقم الحظ اليوم:</span> <span id="z-num"></span>
+        </div>
+
+        <div class="stat-box" style="border-right-color: #4caf50;">
+          <span class="stat-title">🤝 البرج المتوافق اليوم:</span> <span id="z-compat"></span>
+        </div>
+
+        <div class="stat-box" style="border-right-color: #d81b60;">
+          <span class="stat-title">🔥 نسبة الحب اليوم:</span> <span id="z-love"></span>
+        </div>
+      </div>
     </div>
 
   </div>
 
   <script>
-    let horoscopeData = {};
+    let allData = {};
 
-    // جلب التوقعات من ملف data.json
     fetch('data.json')
       .then(res => res.json())
-      .then(data => { horoscopeData = data; })
-      .catch(err => console.error("Error loading data.json", err));
+      .then(data => { allData = data; });
 
-    function showHoroscope(key, name, icon) {
+    function openZodiac(key) {
+      if (!allData[key]) return;
+      
+      const item = allData[key];
+      document.getElementById('z-title').innerText = item.name;
+      document.getElementById('z-general').innerText = item.general;
+      document.getElementById('z-financial').innerText = item.financial;
+      document.getElementById('z-emotional').innerText = item.emotional;
+      document.getElementById('z-num').innerText = item.lucky_num;
+      document.getElementById('z-compat').innerText = item.compatible;
+      document.getElementById('z-love').innerText = item.love_rate;
+
       document.getElementById('main-page').style.display = 'none';
       document.getElementById('detail-page').style.display = 'block';
-      document.getElementById('zodiac-title').innerText = icon + ' ' + name;
-      
-      if (horoscopeData && horoscopeData[key]) {
-        document.getElementById('zodiac-text').innerText = horoscopeData[key];
-      } else {
-        document.getElementById('zodiac-text').innerText = "توقعات اليوم غير متوفرة حالياً، يرجى المحاولة لاحقاً.";
-      }
       window.scrollTo(0, 0);
     }
 
-    function showMainPage() {
+    function closeZodiac() {
       document.getElementById('detail-page').style.display = 'none';
       document.getElementById('main-page').style.display = 'block';
       window.scrollTo(0, 0);
