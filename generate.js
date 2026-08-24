@@ -4,7 +4,7 @@ async function getHoroscope() {
   const apiKey = process.env.GEMINI_API_KEY;
   
   if (!apiKey) {
-    console.error("خطأ: لم يتم العثور على المفتاح GEMINI_API_KEY داخل الـ Secrets!");
+    console.error("خطأ: لم يتم العثور على المفتاح GEMINI_API_KEY!");
     process.exit(1);
   }
 
@@ -26,7 +26,7 @@ async function getHoroscope() {
 }`;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
