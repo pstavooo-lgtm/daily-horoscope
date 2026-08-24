@@ -1,24 +1,33 @@
-const fs = require('fs');
+import json
+import random
 
-async function getHoroscope() {
-  // توقعات جاهزة وموزعة بشكل ممتاز وتتحدث تلقائياً
-  const data = {
-    aries: "اليوم مناسب للبدء بمهام جديدة وتطوير أعمالك، استغل طاقتك العالية لإنهاء التفاصيل المعلقة.",
-    taurus: "فرص مالية أو مكاسب غير متوقعة في طريقها إليك، حافظ على هدوئك وتأنَّ في اتخاذ القرارات.",
-    gemini: "يوم ممتاز للتواصل واكتساب علاقات جديدة، أفكارك المبتكرة ستلفت انتباه من حولك.",
-    cancer: "تحتاج اليوم لبعض الراحة والابتعاد عن الضغوطات، رتب أولوياتك واهتم بصحتك أولاً.",
-    leo: "حضورك قوي وتأثيرك واضح اليوم، خطوة مهمة تشهدها على الصعيد المهني أو الشخصي.",
-    virgo: "تركيزك العالي يساعدك على حل مشكلة معقدة في العمل، تنظيمك للوقت هو سر نجاحك اليوم.",
-    libra: "التوازن هو مفتاح يومك، ستجد حلولاً وسطية ترضي جميع الأطراف في مسألة تشغل بالك.",
-    scorpio: "حدسك قوي جداً اليوم، اعتمد على إحساسك في اتخاذ القرارات الحاسمة ولا تتسرع.",
-    sagittarius: "طاقة إيجابية وتحركات مثمرة، فرصة جديدة للتطوير أو التعلم تلوح في الأفق.",
-    capricorn: "جهودك السابقة تبدأ بإعطاء ثمارها، واصل التزامك وصبرك وستصل لنتائج ممتازة.",
-    aquarius: "أفكار جديدة ومختلفة تطرأ على ذهنك، لا تتردد في مشاركتها مع الأشخاص المقربين.",
-    pisces: "يوم مليء بالإلهام والمشاعر الطيبة، تواصلك مع من تحب يمنحك راحة نفسية وطاقة مشجعة."
-  };
-
-  fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
-  console.log('تم إنشاء data.json بنجاح!');
+horoscopes = {
+    "aries": "برج الحمل", "taurus": "برج الثور", "gemini": "برج الجوزاء",
+    "cancer": "برج السرطان", "leo": "برج الأسد", "virgo": "برج العذراء",
+    "libra": "برج الميزان", "scorpio": "برج العقرب", "sagittarius": "برج القوس",
+    "capricorn": "برج الجدي", "aquarius": "برج الدلو", "pisces": "برج الحوت"
 }
 
-getHoroscope();
+zodiac_list = list(horoscopes.values())
+
+predictions = {}
+
+for key, name in horoscopes.items():
+    compatible = random.choice(zodiac_list)
+    lucky_num = random.randint(1, 99)
+    love_rate = random.randint(50, 99)
+    
+    predictions[key] = {
+        "name": name,
+        "general": f"اليوم يحمل لك طاقة إيجابية ممتازة لترتيب أمورك. تجنب الانفعال وكن صبوراً في اتخاذ القرارات المهمة.",
+        "financial": "فرصة مالية أو مكافأة بسيطة في الطريق إليك، استغلها بذكاء.",
+        "emotional": "الشريك يحتاج منك اهتماماً إضافياً اليوم، الحوار الهادئ يحل كل الخلافات.",
+        "lucky_num": str(lucky_num),
+        "compatible": compatible,
+        "love_rate": f"{love_rate}%"
+    }
+
+with open("data.json", "w", encoding="utf-8") as f:
+    json.dump(predictions, f, ensure-ascii=False, indent=2)
+
+print("Data generated successfully!")
