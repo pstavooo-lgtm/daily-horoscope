@@ -1,0 +1,25 @@
+name: Daily Horoscope Generator
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # يعمل يومياً الساعة 12 ليلاً تلقائياً
+  workflow_dispatch: # يتيح لك تشغيله يدوياً لتجربة الموقع فوراً
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: node generate.js
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "Horoscope Bot"
+          git config --global user.email "bot@github.com"
+          git add data.json
+          git commit -m "Update daily horoscope" || exit 0
+          git push
