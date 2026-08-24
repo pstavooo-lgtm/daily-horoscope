@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>توقعات الأبراج اليومية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0d0826 0%, #1a103c 100%);
+      color: #e2e8f0;
+      padding: 20px 15px;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    h1 {
+      color: #f39c12;
+      font-size: 1.8rem;
+      text-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+    }
+    p.subtitle {
+      font-size: 0.9rem;
+      color: #a0aec0;
+      margin-top: 5px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+    .card:active { transform: scale(0.98); }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+    }
+    .sign-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffd700;
+    }
+    .sign-icon { font-size: 1.5rem; }
+    .card-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      text-align: justify;
+    }
+    .loading {
+      text-align: center;
+      grid-column: 1 / -1;
+      font-size: 1.1rem;
+      color: #f39c12;
+      padding: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔮 توقعات الأبراج اليومية</h1>
+    <p class="subtitle">تحديث يومي تلقائي لأبرز توقعات الفلك</p>
+  </header>
+
+  <main class="grid" id="container">
+    <div class="loading">جاري جلب توقعات اليوم... ✨</div>
+  </main>
+
+  <script>
+    const signs = {
+      aries: { name: "الحمل", icon: "♈" },
+      taurus: { name: "الثور", icon: "♉" },
+      gemini: { name: "الجوزاء", icon: "♊" },
+      cancer: { name: "السرطان", icon: "♋" },
+      leo: { name: "الأسد", icon: "♌" },
+      virgo: { name: "العذراء", icon: "♍" },
+      libra: { name: "الميزان", icon: "♎" },
+      scorpio: { name: "العقرب", icon: "♏" },
+      sagittarius: { name: "القوس", icon: "♐" },
+      capricorn: { name: "الجدي", icon: "♑" },
+      aquarius: { name: "الدلو", icon: "♒" },
+      pisces: { name: "الحوت", icon: "♓" }
+    };
+
+    fetch('./data.json?v=' + new Date().getTime())
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('container');
+        container.innerHTML = '';
+        for (let key in data) {
+          const sign = signs[key] || { name: key, icon: "⭐" };
+          container.innerHTML += `
+            <div class="card">
+              <div class="card-header">
+                <span class="sign-name">${sign.name}</span>
+                <span class="sign-icon">${sign.icon}</span>
+              </div>
+              <p class="card-text">${data[key]}</p>
+            </div>`;
+        }
+      })
+      .catch(err => {
+        document.getElementById('container').innerHTML = `<div class="loading">حدث خطأ أو جاري تجهيز البيانات لأول مرة... يرجى تشغيل الـ Action تجريبياً.</div>`;
+      });
+  </script>
+</body>
+</html>
