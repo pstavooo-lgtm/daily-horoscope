@@ -1,143 +1,141 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حالات وصور 📸</title>
-  <style>
-    :root { --primary-blue: #1b5e9d; --bg-color: #0b3c5d; }
-    * { box-sizing: border-box; }
-    body { background-color: var(--bg-color); font-family: tahoma, sans-serif; margin: 0; padding: 0; color: #333; direction: rtl; }
-    .top-header { background-color: var(--primary-blue); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
-    .top-header h1 { margin: 0; font-size: 18px; }
-    .back-btn { color: white; text-decoration: none; font-weight: bold; font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; }
-    .tabs-nav { background-color: var(--primary-blue); display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); }
-    .tab-btn { flex: 1; padding: 12px 0; text-align: center; color: #d0e1f9; font-weight: bold; cursor: pointer; border-bottom: 4px solid transparent; }
-    .tab-btn.active { color: #fff; border-bottom: 4px solid #fbc02d; }
-    .main-container { max-width: 500px; margin: 10px auto; padding: 0 10px; }
-    .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 12px; }
-    .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; color: white; }
-    .btn-pink { background: #d81b60; } .btn-blue { background: #1e88e5; } .btn-green { background: #2e7d32; } .btn-red { background: #c62828; } .btn-gray { background: #757575; }
-    .page-section { display: none; } .page-section.active { display: block; }
+const firebaseConfig = {
+  apiKey: "AIzaSyBO2BN1GKnCEavALSt87PooM0eG9YC9oxY",
+  authDomain: "horoscope-app-c1226.firebaseapp.com",
+  databaseURL: "https://horoscope-app-c1226-default-rtdb.firebaseio.com",
+  projectId: "horoscope-app-c1226",
+  storageBucket: "horoscope-app-c1226.firebasestorage.app",
+  messagingSenderId: "147456145049",
+  appId: "1:147456145049:web:3ea1e96783ea730828ea08"
+};
 
-    /* شاشة تسجيل الدخول الإلزامية */
-    #auth-screen { text-align: center; padding: 30px 15px; }
-    .google-btn { background: #4285f4; color: white; font-weight: bold; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; justify-content: center; width: 100%; }
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-    /* النافذة العائمة للنشر */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
-      display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px;
-    }
-    .modal-box { background: white; width: 100%; max-width: 450px; border-radius: 12px; padding: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 12px; }
-    .modal-header h3 { margin: 0; font-size: 16px; color: #1b5e9d; }
-    .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: #888; }
-    .post-textarea { width: 100%; height: 90px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; resize: none; font-size: 14px; }
-    .char-counter { text-align: left; font-size: 11px; color: #777; margin-top: 2px; margin-bottom: 10px; }
-    .img-preview-container { position: relative; margin-top: 8px; display: none; }
-    .img-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
-    .remove-img-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; }
-    .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
+let currentUser = null;
+let selectedImageBase64 = "";
 
-    .post-card { background: white; border-radius: 8px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .post-header { display: flex; align-items: center; padding: 10px; gap: 10px; }
-    .post-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-    .post-author { font-weight: bold; font-size: 14px; }
-    .post-time { font-size: 11px; color: #777; }
-    .post-text { padding: 0 10px 10px 10px; font-size: 14px; }
-    .post-img { width: 100%; max-height: 400px; object-fit: cover; display: block; }
-  </style>
+// معالجة نتيجة العودة من توجيه تسجيل الدخول
+auth.getRedirectResult().then((result) => {
+  if (result.user) {
+    console.log("تم تسجيل الدخول بنجاح عبر التوجيه المباشر");
+  }
+}).catch((error) => {
+  console.error("خطأ في إعادة التوجيه:", error.message);
+});
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-</head>
-<body>
+// فحص حالة المستخدم والتحديث المستمر للواجهة
+auth.onAuthStateChanged((user) => {
+  const authScreen = document.getElementById('auth-screen');
+  const appContent = document.getElementById('app-content');
 
-  <div class="top-header">
-    <a href="index.html" class="back-btn">➔ العودة</a>
-    <h1>صور العامة</h1>
-    <div>❤️</div>
-  </div>
+  if (user) {
+    currentUser = user;
+    if (authScreen) authScreen.style.display = 'none';
+    if (appContent) appContent.style.display = 'block';
 
-  <div class="main-container">
-    <!-- شاشة تسجيل الدخول بالمستعرض عند فتح الصفحة -->
-    <div id="auth-screen" class="card">
-      <h3 style="margin-top:0; color:#1b5e9d;">مرحباً بك في حالات وصور 👋</h3>
-      <p style="color:#666; font-size:14px;">يتطلب استخدام هذا القسم تسجيل الدخول باستخدام حساب جوجل الخاص بك لاستعراض ونشر الصور.</p>
-      <button class="google-btn" onclick="loginWithGoogle()">
-        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" width="18" height="18">
-        تسجيل الدخول بواسطة Google
-      </button>
-    </div>
+    const userImg = document.getElementById('user-profile-img');
+    const userName = document.getElementById('user-profile-name');
+    const userEmail = document.getElementById('user-profile-email');
 
-    <!-- المحتوى الكامل (مخفي حتى يتم تسجيل الدخول) -->
-    <div id="app-content" style="display:none;">
-      <div class="tabs-nav" id="main-tabs" style="margin-bottom:12px; border-radius:8px;">
-        <div class="tab-btn" onclick="switchTab('profile', this)">حسابي</div>
-        <div class="tab-btn active" onclick="switchTab('main', this)">الرئيسية</div>
-        <div class="tab-btn" onclick="switchTab('chat', this)">دردشة عامة</div>
-      </div>
+    if (userImg) userImg.src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    if (userName) userName.innerText = user.displayName || 'مستخدم';
+    if (userEmail) userEmail.innerText = user.email || '';
 
-      <div id="section-main" class="page-section active">
-        <div class="card">
-          <div style="text-align:center; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">الخيارات</div>
-          <button class="btn btn-pink" onclick="openPostModal()">📷 نشر صورة جديدة</button>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px;">
-            <button class="btn btn-green" onclick="alert('الوضع الآمن مفعل تلقائياً')">🛡️ تفعيل الوضع الآمن</button>
-            <button class="btn btn-blue" onclick="filterMyPosts()">🖼️ عرض منشوراتي</button>
-          </div>
-        </div>
-        <div id="posts-feed-container"></div>
-      </div>
+    if (typeof loadPostsFeed === 'function') loadPostsFeed();
+  } else {
+    currentUser = null;
+    if (authScreen) authScreen.style.display = 'block';
+    if (appContent) appContent.style.display = 'none';
+  }
+});
 
-      <div id="section-profile" class="page-section">
-        <div class="card" style="text-align:center;">
-          <img id="user-profile-img" src="" style="width:80px; height:80px; border-radius:50%; margin-bottom:10px;">
-          <h3 id="user-profile-name" style="margin:5px 0;"></h3>
-          <p id="user-profile-email" style="color:#777; font-size:13px;"></p>
-          <button class="btn btn-red" onclick="logoutGoogle()" style="margin-top:15px;">تسجيل الخروج</button>
-        </div>
-      </div>
+// تسجيل الدخول بالتوجيه المباشر (تخطي حظر النافذة المنبثقة)
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithRedirect(provider);
+}
 
-      <div id="section-chat" class="page-section">
-        <div class="card" style="text-align:center; color:#666;">قسم الدردشة العامة قيد التطوير</div>
-      </div>
-    </div>
-  </div>
+function logoutGoogle() {
+  auth.signOut().then(() => {
+    alert("تم تسجيل الخروج بنجاح");
+  });
+}
 
-  <div id="post-modal" class="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3>إنشاء منشور جديد</h3>
-        <button class="close-modal" onclick="closePostModal()">✖</button>
-      </div>
-      <textarea id="modal-text-input" class="post-textarea" placeholder="اكتب حالة أو وصفاً (300 حرف كحد أقصى)..." maxlength="300" oninput="updateCharCount()"></textarea>
-      <div id="char-counter" class="char-counter">متبقي 300 حرف</div>
-      <input type="file" id="modal-file-input" accept="image/*" style="display:none;" onchange="handleImagePreview(event)">
-      <button class="btn btn-blue" style="font-size:13px; padding:8px;" onclick="document.getElementById('modal-file-input').click()">🖼️ اختيار صورة من الجهاز</button>
-      <div id="img-preview-box" class="img-preview-container">
-        <img id="modal-img-preview" class="img-preview">
-        <button class="remove-img-btn" onclick="removeSelectedImage()">✖</button>
-      </div>
-      <div class="modal-actions">
-        <button id="submit-post-btn" class="btn btn-green" onclick="submitNewPost()">نشر الآن 🚀</button>
-        <button class="btn btn-gray" onclick="closePostModal()">إلغاء</button>
-      </div>
-    </div>
-  </div>
+function openPostModal() { document.getElementById('post-modal').style.display = 'flex'; }
+function closePostModal() {
+  document.getElementById('post-modal').style.display = 'none';
+  document.getElementById('modal-text-input').value = "";
+  removeSelectedImage();
+  updateCharCount();
+}
 
-  <script src="create-post.js"></script>
-  <script src="feed.js"></script>
-  <script>
-    function switchTab(tabName, el) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-      if(el) el.classList.add('active');
-      document.getElementById('section-' + tabName).classList.add('active');
-    }
-  </script>
-</body>
-</html>
+function updateCharCount() {
+  const input = document.getElementById('modal-text-input');
+  const counter = document.getElementById('char-counter');
+  if (!input || !counter) return;
+  const remaining = 300 - input.value.length;
+  counter.innerText = `متبقي ${remaining} حرف`;
+  counter.style.color = remaining < 30 ? "#c62828" : "#777";
+}
+
+function handleImagePreview(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    selectedImageBase64 = e.target.result;
+    document.getElementById('modal-img-preview').src = selectedImageBase64;
+    document.getElementById('img-preview-box').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeSelectedImage() {
+  selectedImageBase64 = "";
+  const fileInput = document.getElementById('modal-file-input');
+  const previewBox = document.getElementById('img-preview-box');
+  const imgPreview = document.getElementById('modal-img-preview');
+  if (fileInput) fileInput.value = "";
+  if (previewBox) previewBox.style.display = 'none';
+  if (imgPreview) imgPreview.src = "";
+}
+
+function submitNewPost() {
+  if (!currentUser) { alert("يرجى تسجيل الدخول أولاً!"); return; }
+
+  const text = document.getElementById('modal-text-input').value.trim();
+  if (!text && !selectedImageBase64) { alert("يرجى كتابة نص أو اختيار صورة!"); return; }
+
+  const userId = currentUser.uid;
+  const lastPostTime = localStorage.getItem('last_post_time_' + userId);
+  const now = Date.now();
+
+  if (lastPostTime && (now - lastPostTime < 10 * 60 * 1000)) {
+    const minutesLeft = Math.ceil((10 * 60 * 1000 - (now - lastPostTime)) / (1000 * 60));
+    alert(`عذراً، يمكنك النشر مجدداً بعد ${minutesLeft} دقائق.`);
+    return;
+  }
+
+  const submitBtn = document.getElementById('submit-post-btn');
+  submitBtn.disabled = true;
+  submitBtn.innerText = "جاري النشر...";
+
+  db.ref('posts').push({
+    uid: userId,
+    author: currentUser.displayName || "مستخدم",
+    avatar: currentUser.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    text: text,
+    image: selectedImageBase64,
+    timestamp: now
+  }).then(() => {
+    localStorage.setItem('last_post_time_' + userId, now);
+    submitBtn.disabled = false;
+    submitBtn.innerText = "نشر الآن 🚀";
+    closePostModal();
+  }).catch(err => {
+    alert("خطأ أثناء النشر: " + err.message);
+    submitBtn.disabled = false;
+    submitBtn.innerText = "نشر الآن 🚀";
+  });
+}
