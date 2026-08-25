@@ -15,42 +15,51 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
-// معالجة نتيجة العودة من توجيه تسجيل الدخول
-auth.getRedirectResult().then((result) => {
-  if (result.user) {
-    console.log("تم تسجيل الدخول بنجاح عبر التوجيه المباشر");
-  }
-}).catch((error) => {
-  console.error("خطأ في إعادة التوجيه:", error.message);
+// فحص حالة الدخول ومعالجة النتيجة فور تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+  auth.getRedirectResult().then((result) => {
+    if (result.user) {
+      handleUserLogin(result.user);
+    }
+  }).catch((error) => {
+    console.error("خطأ في إعادة التوجيه:", error.message);
+  });
 });
 
-// فحص حالة المستخدم والتحديث المستمر للواجهة
+// مراقب حالة التسجيل المستمر
 auth.onAuthStateChanged((user) => {
-  const authScreen = document.getElementById('auth-screen');
-  const appContent = document.getElementById('app-content');
-
   if (user) {
-    currentUser = user;
-    if (authScreen) authScreen.style.display = 'none';
-    if (appContent) appContent.style.display = 'block';
-
-    const userImg = document.getElementById('user-profile-img');
-    const userName = document.getElementById('user-profile-name');
-    const userEmail = document.getElementById('user-profile-email');
-
-    if (userImg) userImg.src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-    if (userName) userName.innerText = user.displayName || 'مستخدم';
-    if (userEmail) userEmail.innerText = user.email || '';
-
-    if (typeof loadPostsFeed === 'function') loadPostsFeed();
+    handleUserLogin(user);
   } else {
     currentUser = null;
+    const authScreen = document.getElementById('auth-screen');
+    const appContent = document.getElementById('app-content');
     if (authScreen) authScreen.style.display = 'block';
     if (appContent) appContent.style.display = 'none';
   }
 });
 
-// تسجيل الدخول بالتوجيه المباشر (تخطي حظر النافذة المنبثقة)
+function handleUserLogin(user) {
+  currentUser = user;
+  const authScreen = document.getElementById('auth-screen');
+  const appContent = document.getElementById('app-content');
+
+  if (authScreen) authScreen.style.display = 'none';
+  if (appContent) appContent.style.display = 'block';
+
+  const userImg = document.getElementById('user-profile-img');
+  const userName = document.getElementById('user-profile-name');
+  const userEmail = document.getElementById('user-profile-email');
+
+  if (userImg) userImg.src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  if (userName) userName.innerText = user.displayName || 'مستخدم';
+  if (userEmail) userEmail.innerText = user.email || '';
+
+  if (typeof loadPostsFeed === 'function') {
+    loadPostsFeed();
+  }
+}
+
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithRedirect(provider);
@@ -58,7 +67,7 @@ function loginWithGoogle() {
 
 function logoutGoogle() {
   auth.signOut().then(() => {
-    alert("تم تسجيل الخروج بنجاح");
+    location.reload();
   });
 }
 
