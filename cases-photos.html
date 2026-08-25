@@ -8,30 +8,31 @@
     :root { --primary-blue: #1b5e9d; --bg-color: #0b3c5d; }
     * { box-sizing: border-box; }
     body { background-color: var(--bg-color); font-family: tahoma, sans-serif; margin: 0; padding: 0; color: #333; direction: rtl; }
+    
     .top-header { background-color: var(--primary-blue); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
     .top-header h1 { margin: 0; font-size: 18px; }
     .back-btn { color: white; text-decoration: none; font-weight: bold; font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; }
+    
     .tabs-nav { background-color: var(--primary-blue); display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); }
     .tab-btn { flex: 1; padding: 12px 0; text-align: center; color: #d0e1f9; font-weight: bold; cursor: pointer; border-bottom: 4px solid transparent; }
     .tab-btn.active { color: #fff; border-bottom: 4px solid #fbc02d; }
+    
     .main-container { max-width: 500px; margin: 10px auto; padding: 0 10px; }
     .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 12px; }
     .input-field { width: 100%; padding: 10px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
     .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; color: white; }
     .btn-pink { background: #d81b60; } .btn-blue { background: #1e88e5; } .btn-green { background: #2e7d32; } .btn-red { background: #c62828; } .btn-gray { background: #757575; }
-    .page-section { display: none; } .page-section.active { display: block; }
+    
+    .page-section { display: none; } 
+    .page-section.active { display: block; }
 
     /* النافذة العائمة (Modal) */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
-      display: none; justify-content: center; align-items: center; z-index: 1000;
-      padding: 15px;
+      display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px;
     }
-    .modal-box {
-      background: white; width: 100%; max-width: 450px; border-radius: 12px;
-      padding: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    }
+    .modal-box { background: white; width: 100%; max-width: 450px; border-radius: 12px; padding: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 12px; }
     .modal-header h3 { margin: 0; font-size: 16px; color: #1b5e9d; }
     .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: #888; }
@@ -41,6 +42,14 @@
     .img-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
     .remove-img-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; }
     .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
+
+    .post-card { background: white; border-radius: 8px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .post-header { display: flex; align-items: center; padding: 10px; gap: 10px; }
+    .post-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .post-author { font-weight: bold; font-size: 14px; }
+    .post-time { font-size: 11px; color: #777; }
+    .post-text { padding: 0 10px 10px 10px; font-size: 14px; }
+    .post-img { width: 100%; max-height: 400px; object-fit: cover; display: block; }
   </style>
 
   <!-- مكتبات السيرفر -->
@@ -56,7 +65,7 @@
     <div>❤️</div>
   </div>
 
-  <div class="tabs-nav" id="main-tabs" style="display:none;">
+  <div class="tabs-nav" id="main-tabs" style="display:flex;">
     <div class="tab-btn" onclick="switchTab('profile', this)">حسابي</div>
     <div class="tab-btn active" onclick="switchTab('main', this)">الرئيسية</div>
     <div class="tab-btn" onclick="switchTab('chat', this)">دردشة عامة</div>
@@ -64,7 +73,7 @@
 
   <div class="main-container">
     <!-- حاوية واجهة التسجيل -->
-    <div id="auth-container"></div>
+    <div id="auth-container" style="display:none;"></div>
 
     <!-- قسم الرئيسية -->
     <div id="section-main" class="page-section active">
@@ -117,8 +126,179 @@
     </div>
   </div>
 
-  <script src="profile.js"></script>
-  <script src="create-post.js"></script>
-  <script src="feed.js"></script>
+  <script>
+    // تهيئة السيرفر المباشر
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO2BN1GKnCEavALSt87PooM0eG9YC9oxY",
+      authDomain: "horoscope-app-c1226.firebaseapp.com",
+      databaseURL: "https://horoscope-app-c1226-default-rtdb.firebaseio.com",
+      projectId: "horoscope-app-c1226",
+      storageBucket: "horoscope-app-c1226.firebasestorage.app",
+      messagingSenderId: "147456145049",
+      appId: "1:147456145049:web:3ea1e96783ea730828ea08"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    let currentUser = null;
+    let selectedImageBase64 = "";
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('auth-container').style.display = 'none';
+        loadPosts();
+      } else {
+        currentUser = null;
+        renderAuthForm();
+      }
+    });
+
+    function switchTab(tabName, el) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+      if(el) el.classList.add('active');
+      document.getElementById('section-' + tabName).classList.add('active');
+    }
+
+    function openPostModal() { document.getElementById('post-modal').style.display = 'flex'; }
+    function closePostModal() {
+      document.getElementById('post-modal').style.display = 'none';
+      document.getElementById('modal-text-input').value = "";
+      removeSelectedImage();
+      updateCharCount();
+    }
+
+    function updateCharCount() {
+      const input = document.getElementById('modal-text-input');
+      const counter = document.getElementById('char-counter');
+      const remaining = 300 - input.value.length;
+      counter.innerText = `متبقي ${remaining} حرف`;
+      counter.style.color = remaining < 30 ? "#c62828" : "#777";
+    }
+
+    function handleImagePreview(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        selectedImageBase64 = e.target.result;
+        document.getElementById('modal-img-preview').src = selectedImageBase64;
+        document.getElementById('img-preview-box').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeSelectedImage() {
+      selectedImageBase64 = "";
+      document.getElementById('modal-file-input').value = "";
+      document.getElementById('img-preview-box').style.display = 'none';
+      document.getElementById('modal-img-preview').src = "";
+    }
+
+    function submitNewPost() {
+      if (!currentUser) { alert("يرجى تسجيل الدخول أولاً!"); return; }
+      const text = document.getElementById('modal-text-input').value.trim();
+      if (!text && !selectedImageBase64) { alert("يرجى كتابة نص أو اختيار صورة!"); return; }
+
+      const lastPostTime = localStorage.getItem('last_post_time_' + currentUser.uid);
+      const now = Date.now();
+      if (lastPostTime && (now - lastPostTime < 10 * 60 * 1000)) {
+        const minutesLeft = Math.ceil((10 * 60 * 1000 - (now - lastPostTime)) / (1000 * 60));
+        alert(`عذراً، يمكنك النشر مجدداً بعد ${minutesLeft} دقائق.`);
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-post-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "جاري النشر...";
+
+      db.ref('users/' + currentUser.uid).once('value', (snap) => {
+        const userData = snap.val() || {};
+        const authorName = userData.name || currentUser.displayName || "مستخدم";
+        const authorPhoto = userData.photo || currentUser.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        db.ref('posts').push({
+          uid: currentUser.uid,
+          author: authorName,
+          avatar: authorPhoto,
+          text: text,
+          image: selectedImageBase64,
+          timestamp: Date.now()
+        }).then(() => {
+          localStorage.setItem('last_post_time_' + currentUser.uid, Date.now());
+          submitBtn.disabled = false;
+          submitBtn.innerText = "نشر الآن 🚀";
+          closePostModal();
+        }).catch(err => {
+          alert("خطأ: " + err.message);
+          submitBtn.disabled = false;
+          submitBtn.innerText = "نشر الآن 🚀";
+        });
+      });
+    }
+
+    function loadPosts() {
+      db.ref('posts').on('value', (snapshot) => {
+        const container = document.getElementById('posts-feed-container');
+        container.innerHTML = "";
+        const data = snapshot.val();
+        if (!data) {
+          container.innerHTML = `<div style="text-align:center; color:white; padding:20px;">لا توجد منشورات حالياً.</div>`;
+          return;
+        }
+        Object.entries(data).reverse().forEach(([key, post]) => {
+          const card = document.createElement('div');
+          card.className = 'post-card';
+          card.innerHTML = `
+            <div class="post-header">
+              <img src="${post.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="post-avatar">
+              <div>
+                <div class="post-author">${post.author || 'مستخدم'}</div>
+                <div class="post-time">${new Date(post.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</div>
+              </div>
+            </div>
+            ${post.text ? `<div class="post-text">${post.text}</div>` : ''}
+            ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
+          `;
+          container.appendChild(card);
+        });
+      });
+    }
+
+    function renderAuthForm() {
+      const container = document.getElementById('auth-container');
+      container.style.display = 'block';
+      container.innerHTML = `<div class="card" style="text-align:center;"><p>يرجى تسجيل الدخول أولاً لتتمكن من استخدام التطبيق.</p></div>`;
+    }
+
+    function filterMyPosts() {
+      if (!currentUser) return;
+      db.ref('posts').once('value', (snapshot) => {
+        const container = document.getElementById('posts-feed-container');
+        container.innerHTML = "";
+        const data = snapshot.val() || {};
+        Object.entries(data).reverse().forEach(([key, post]) => {
+          if (post.uid === currentUser.uid) {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.innerHTML = `
+              <div class="post-header">
+                <img src="${post.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="post-avatar">
+                <div>
+                  <div class="post-author">${post.author || 'مستخدم'}</div>
+                  <div class="post-time">${new Date(post.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</div>
+                </div>
+              </div>
+              ${post.text ? `<div class="post-text">${post.text}</div>` : ''}
+              ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
+            `;
+            container.appendChild(card);
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>
