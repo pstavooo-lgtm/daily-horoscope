@@ -15,9 +15,41 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
+// فحص حالة التسجيل فور فتح الصفحة
 auth.onAuthStateChanged((user) => {
-  currentUser = user;
+  const authScreen = document.getElementById('auth-screen');
+  const appContent = document.getElementById('app-content');
+
+  if (user) {
+    currentUser = user;
+    if (authScreen) authScreen.style.display = 'none';
+    if (appContent) appContent.style.display = 'block';
+
+    // تحديث بيانات التبويب الشخصي
+    document.getElementById('user-profile-img').src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    document.getElementById('user-profile-name').innerText = user.displayName || 'مستخدم';
+    document.getElementById('user-profile-email').innerText = user.email || '';
+
+    if (typeof loadPostsFeed === 'function') loadPostsFeed();
+  } else {
+    currentUser = null;
+    if (authScreen) authScreen.style.display = 'block';
+    if (appContent) appContent.style.display = 'none';
+  }
 });
+
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(error => {
+    alert("فشل تسجيل الدخول: " + error.message);
+  });
+}
+
+function logoutGoogle() {
+  auth.signOut().then(() => {
+    alert("تم تسجيل الخروج بنجاح");
+  });
+}
 
 function openPostModal() { document.getElementById('post-modal').style.display = 'flex'; }
 function closePostModal() {
@@ -55,10 +87,12 @@ function removeSelectedImage() {
 }
 
 function submitNewPost() {
+  if (!currentUser) { alert("يرجى تسجيل الدخول أولاً!"); return; }
+
   const text = document.getElementById('modal-text-input').value.trim();
   if (!text && !selectedImageBase64) { alert("يرجى كتابة نص أو اختيار صورة!"); return; }
 
-  const userId = currentUser ? currentUser.uid : "anonymous_user";
+  const userId = currentUser.uid;
   const lastPostTime = localStorage.getItem('last_post_time_' + userId);
   const now = Date.now();
 
@@ -74,8 +108,8 @@ function submitNewPost() {
 
   db.ref('posts').push({
     uid: userId,
-    author: currentUser ? (currentUser.displayName || "مستخدم") : "زائر",
-    avatar: currentUser ? (currentUser.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png") : "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    author: currentUser.displayName || "مستخدم",
+    avatar: currentUser.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     text: text,
     image: selectedImageBase64,
     timestamp: now
