@@ -15,7 +15,16 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
-// فحص حالة التسجيل فور فتح الصفحة
+// معالجة نتيجة العودة من توجيه تسجيل الدخول
+auth.getRedirectResult().then((result) => {
+  if (result.user) {
+    console.log("تم تسجيل الدخول بنجاح عبر التوجيه المباشر");
+  }
+}).catch((error) => {
+  console.error("خطأ في إعادة التوجيه:", error.message);
+});
+
+// فحص حالة المستخدم والتحديث المستمر للواجهة
 auth.onAuthStateChanged((user) => {
   const authScreen = document.getElementById('auth-screen');
   const appContent = document.getElementById('app-content');
@@ -25,10 +34,13 @@ auth.onAuthStateChanged((user) => {
     if (authScreen) authScreen.style.display = 'none';
     if (appContent) appContent.style.display = 'block';
 
-    // تحديث بيانات التبويب الشخصي
-    document.getElementById('user-profile-img').src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-    document.getElementById('user-profile-name').innerText = user.displayName || 'مستخدم';
-    document.getElementById('user-profile-email').innerText = user.email || '';
+    const userImg = document.getElementById('user-profile-img');
+    const userName = document.getElementById('user-profile-name');
+    const userEmail = document.getElementById('user-profile-email');
+
+    if (userImg) userImg.src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    if (userName) userName.innerText = user.displayName || 'مستخدم';
+    if (userEmail) userEmail.innerText = user.email || '';
 
     if (typeof loadPostsFeed === 'function') loadPostsFeed();
   } else {
@@ -38,11 +50,10 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+// تسجيل الدخول بالتوجيه المباشر (تخطي حظر النافذة المنبثقة)
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(error => {
-    alert("فشل تسجيل الدخول: " + error.message);
-  });
+  auth.signInWithRedirect(provider);
 }
 
 function logoutGoogle() {
@@ -62,6 +73,7 @@ function closePostModal() {
 function updateCharCount() {
   const input = document.getElementById('modal-text-input');
   const counter = document.getElementById('char-counter');
+  if (!input || !counter) return;
   const remaining = 300 - input.value.length;
   counter.innerText = `متبقي ${remaining} حرف`;
   counter.style.color = remaining < 30 ? "#c62828" : "#777";
@@ -81,9 +93,12 @@ function handleImagePreview(event) {
 
 function removeSelectedImage() {
   selectedImageBase64 = "";
-  document.getElementById('modal-file-input').value = "";
-  document.getElementById('img-preview-box').style.display = 'none';
-  document.getElementById('modal-img-preview').src = "";
+  const fileInput = document.getElementById('modal-file-input');
+  const previewBox = document.getElementById('img-preview-box');
+  const imgPreview = document.getElementById('modal-img-preview');
+  if (fileInput) fileInput.value = "";
+  if (previewBox) previewBox.style.display = 'none';
+  if (imgPreview) imgPreview.src = "";
 }
 
 function submitNewPost() {
