@@ -15,7 +15,7 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
-// مراقب حالة التسجيل المستمر
+// مراقبة الدخول الحقيقية - تعمل تلقائياً بعد اختيار حساب جوجل
 auth.onAuthStateChanged((user) => {
   const authScreen = document.getElementById('auth-screen');
   const appContent = document.getElementById('app-content');
@@ -41,16 +41,10 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// تسجيل الدخول بواسطة Popup
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .then((result) => {
-      console.log("تم تسجيل الدخول بنجاح");
-    })
-    .catch((error) => {
-      alert("خطأ أثناء تسجيل الدخول: " + error.message);
-    });
+  // استخدام Redirect لتفادي حظر الموبايل للـ Popup
+  auth.signInWithRedirect(provider);
 }
 
 function logoutGoogle() {
