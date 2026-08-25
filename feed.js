@@ -73,12 +73,12 @@ function createPostCardElement(postId, post) {
 
 function toggleLike(postId) {
   console.log("استدعاء الإعجاب للمنشور:", postId);
-  alert("ميزة الإعجاب قيد التطوير مجهزة للمستقبل!");
+  alert("ميزة الإعجاب مجهزة للمستقبل!");
 }
 
 function openComments(postId) {
   console.log("استدعاء التعليقات للمنشور:", postId);
-  alert("ميزة التعليقات قيد التطوير مجهزة للمستقبل!");
+  alert("ميزة التعليقات مجهزة للمستقبل!");
 }
 
 function sharePost(postId) {
@@ -99,7 +99,7 @@ function openPostMenu(postId, authorUid) {
       deletePost(postId);
     }
   } else {
-    alert("خيارات المنشور: الإبلاغ / نسخ الرابط (مجهزة للمستقبل)");
+    alert("خيارات المنشور: الإبلاغ / نسخ الرابط");
   }
 }
 
