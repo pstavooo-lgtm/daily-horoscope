@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معرفة برجك 🔮</title>
+  <style>
+    body { 
+      background-color: #0d5c48; 
+      font-family: tahoma, sans-serif; 
+      display: flex; 
+      justify-content: center; 
+      min-height: 100vh; 
+      margin: 0; 
+      padding: 10px; 
+    }
+    .container { 
+      width: 100%; 
+      max-width: 450px; 
+      background: white; 
+      margin-top: 15px; 
+      padding: 20px; 
+      border-radius: 12px; 
+      height: fit-content; 
+      text-align: center; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+    }
+    .back-btn { 
+      display: inline-block; 
+      background: #1e63b8; 
+      color: white; 
+      padding: 8px 18px; 
+      border-radius: 20px; 
+      text-decoration: none; 
+      font-weight: bold; 
+      margin-bottom: 15px; 
+      float: right; 
+    }
+    .input-group { margin: 15px 0; text-align: right; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; color: #333; }
+    select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; margin-top: 5px; }
+    button { background: #ff9800; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 18px; }
+    .result { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px; font-weight: bold; color: #b71c1c; display: none; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">➔ العودة للرئيسية</a>
+    <h2 style="clear: both; padding-top: 10px; color: #222;">عرف برجك من تاريخ ميلادك</h2>
+    
+    <div class="input-group">
+      <label>اختر اليوم:</label>
+      <select id="day"></select>
+    </div>
+    
+    <div class="input-group">
+      <label>اختر الشهر:</label>
+      <select id="month">
+        <option value="1">يناير (1)</option>
+        <option value="2">فبراير (2)</option>
+        <option value="3">مارس (3)</option>
+        <option value="4">أبريل (4)</option>
+        <option value="5">مايو (5)</option>
+        <option value="6">يونيو (6)</option>
+        <option value="7">يوليو (7)</option>
+        <option value="8">أغسطس (8)</option>
+        <option value="9">سبتمبر (9)</option>
+        <option value="10">أكتوبر (10)</option>
+        <option value="11">نوفمبر (11)</option>
+        <option value="12">ديسمبر (12)</option>
+      </select>
+    </div>
+
+    <button onclick="calculateZodiac()">اكتشف برجك الآن</button>
+    <div id="result-box" class="result"></div>
+  </div>
+
+  <script>
+    const daySelect = document.getElementById('day');
+    for(let i=1; i<=31; i++) {
+      daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+    }
+
+    function calculateZodiac() {
+      const d = parseInt(document.getElementById('day').value);
+      const m = parseInt(document.getElementById('month').value);
+      let z = "";
+
+      if ((m == 3 && d >= 21) || (m == 4 && d <= 19)) z = "برج الحمل ♈";
+      else if ((m == 4 && d >= 20) || (m == 5 && d <= 20)) z = "برج الثور ♉";
+      else if ((m == 5 && d >= 21) || (m == 6 && d <= 20)) z = "برج الجوزاء ♊";
+      else if ((m == 6 && d >= 21) || (m == 7 && d <= 22)) z = "برج السرطان ♋";
+      else if ((m == 7 && d >= 23) || (m == 8 && d <= 22)) z = "برج الأسد  ♌";
+      else if ((m == 8 && d >= 23) || (m == 9 && d <= 22)) z = "برج العذراء ♍";
+      else if ((m == 9 && d >= 23) || (m == 10 && d <= 22)) z = "برج الميزان ♎";
+      else if ((m == 10 && d >= 23) || (m == 11 && d <= 21)) z = "برج العقرب ♏";
+      else if ((m == 11 && d >= 22) || (m == 12 && d <= 21)) z = "برج القوس ♐";
+      else if ((m == 12 && d >= 22) || (m == 1 && d <= 19)) z = "برج الجدي ♑";
+      else if ((m == 1 && d >= 20) || (m == 2 && d <= 18)) z = "برج الدلو ♒";
+      else z = "برج الحوت ♓";
+
+      const resBox = document.getElementById('result-box');
+      resBox.innerText = "برجك هو: " + z;
+      resBox.style.display = "block";
+    }
+  </script>
+</body>
+</html>
