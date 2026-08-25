@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>توافق الأبراج 🤝</title>
+  <style>
+    body { 
+      background-color: #0d5c48; 
+      font-family: tahoma, sans-serif; 
+      display: flex; 
+      justify-content: center; 
+      min-height: 100vh; 
+      margin: 0; 
+      padding: 10px; 
+    }
+    .container { 
+      width: 100%; 
+      max-width: 450px; 
+      background: white; 
+      margin-top: 15px; 
+      padding: 20px; 
+      border-radius: 12px; 
+      height: fit-content; 
+      text-align: center; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+    }
+    .back-btn { 
+      display: inline-block; 
+      background: #1e63b8; 
+      color: white; 
+      padding: 8px 18px; 
+      border-radius: 20px; 
+      text-decoration: none; 
+      font-weight: bold; 
+      margin-bottom: 15px; 
+      float: right; 
+    }
+    .input-group { margin: 15px 0; text-align: right; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; color: #333; }
+    select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; margin-top: 5px; box-sizing: border-box; }
+    button { background: #00897b; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 18px; }
+    .result { margin-top: 20px; padding: 15px; background: #e0f2f1; border-radius: 8px; border: 1px solid #80cbc4; display: none; }
+    .rate { font-size: 30px; color: #00695c; font-weight: bold; margin: 10px 0; }
+    .desc { font-size: 15px; color: #333; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">➔ العودة للرئيسية</a>
+    <h2 style="clear: both; padding-top: 10px; color: #00897b;">نسبة توافق الأبراج 🤝</h2>
+    
+    <div class="input-group">
+      <label>اختر برجك:</label>
+      <select id="z1">
+        <option value="aries">برج الحمل ♈</option>
+        <option value="taurus">برج الثور ♉</option>
+        <option value="gemini">برج الجوزاء ♊</option>
+        <option value="cancer">برج السرطان ♋</option>
+        <option value="leo">برج الأسد ♌</option>
+        <option value="virgo">برج العذراء ♍</option>
+        <option value="libra">برج الميزان ♎</option>
+        <option value="scorpio">برج العقرب ♏</option>
+        <option value="sagittarius">برج القوس ♐</option>
+        <option value="capricorn">برج الجدي ♑</option>
+        <option value="aquarius">برج الدلو ♒</option>
+        <option value="pisces">برج الحوت ♓</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>اختر برج الشريك:</label>
+      <select id="z2">
+        <option value="aries">برج الحمل ♈</option>
+        <option value="taurus">برج الثور ♉</option>
+        <option value="gemini">برج الجوزاء ♊</option>
+        <option value="cancer">برج السرطان ♋</option>
+        <option value="leo">برج الأسد ♌</option>
+        <option value="virgo">برج العذراء ♍</option>
+        <option value="libra">برج الميزان ♎</option>
+        <option value="scorpio">برج العقرب ♏</option>
+        <option value="sagittarius">برج القوس ♐</option>
+        <option value="capricorn">برج الجدي ♑</option>
+        <option value="aquarius">برج الدلو ♒</option>
+        <option value="pisces">برج الحوت ♓</option>
+      </select>
+    </div>
+
+    <button onclick="checkCompatibility()">فحص التوافق الان</button>
+
+    <div id="result-box" class="result">
+      <div id="comp-title" style="font-weight: bold; color: #004d40; font-size: 18px;"></div>
+      <div class="rate" id="comp-rate">0%</div>
+      <div class="desc" id="comp-desc"></div>
+    </div>
+  </div>
+
+  <script>
+    function checkCompatibility() {
+      const z1 = document.getElementById('z1');
+      const z2 = document.getElementById('z2');
+      const name1 = z1.options[z1.selectedIndex].text;
+      const name2 = z2.options[z2.selectedIndex].text;
+
+      // خوارزمية حساب نسبة التوافق
+      const str = z1.value + z2.value;
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash += str.charCodeAt(i);
+      }
+      const rate = (hash % 36) + 65; // نسبة تتراوح بين 65% و 100%
+
+      let desc = "";
+      if(rate >= 90) {
+        desc = "توافق استثنائي! هناك انسجام عالي وتفاهم كبير في الأفكار والمشاعر بين هذين البرجين.";
+      } else if(rate >= 80) {
+        desc = "علاقة قوية ومتوازنة، يكمل كل منكما الآخر وتجمعهما طاقة إيجابية مشتركة.";
+      } else if(rate >= 70) {
+        desc = "توافق جيد جداً، يحتاج القليل من الصبر والتنازلات البسيطة لتصبح العلاقة مثالية.";
+      } else {
+        desc = "العلاقة ممتازة ولكن تتطلب الحوار المستمر واكتشاف النقاط المشتركة لتعزيز الارتباط.";
+      }
+
+      document.getElementById('comp-title').innerText = name1 + " + " + name2;
+      document.getElementById('comp-rate').innerText = rate + "%";
+      document.getElementById('comp-desc').innerText = desc;
+      document.getElementById('result-box').style.display = "block";
+    }
+  </script>
+</body>
+</html>
