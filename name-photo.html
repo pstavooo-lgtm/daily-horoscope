@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اسمك بصورة 🎨</title>
+  <style>
+    body { background-color: #0d5c48; font-family: tahoma, sans-serif; display: flex; justify-content: center; min-height: 100vh; margin: 0; padding: 10px; }
+    .container { width: 100%; max-width: 500px; background: white; margin-top: 15px; padding: 20px; border-radius: 12px; height: fit-content; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .back-btn { display: inline-block; background: #1e63b8; color: white; padding: 8px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; margin-bottom: 15px; float: right; }
+    h2 { clear: both; padding-top: 10px; color: #4caf50; }
+    .input-group { margin: 15px 0; text-align: right; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; color: #333; }
+    input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+    
+    .styles-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 15px 0; }
+    .style-box { width: 100%; aspect-ratio: 1; border-radius: 8px; cursor: pointer; border: 2px solid transparent; box-sizing: border-box; }
+    .style-box.selected { border: 2px solid #333; transform: scale(1.1); }
+    
+    .canvas-container { position: relative; margin-top: 15px; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: #f9f9f9; touch-action: none; }
+    canvas { display: block; width: 100%; height: auto; }
+    
+    .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+    .btn { padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; flex: 1; margin: 0 5px; color: white; }
+    .btn-green { background: #4caf50; }
+    .btn-blue { background: #1e88e5; }
+    .hint { font-size: 13px; color: #666; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">➔ العودة للرئيسية</a>
+    <h2>صمم اسمك بصورة 🎨</h2>
+    
+    <div class="input-group">
+      <label>اكتب النص هنا:</label>
+      <input type="text" id="userText" placeholder="اكتب اسمك أو عبارتك" oninput="drawCanvas()">
+    </div>
+
+    <div class="input-group">
+      <label>اختر الاستايل (الخلفية):</label>
+      <div class="styles-grid" id="stylesGrid"></div>
+    </div>
+
+    <div class="canvas-container" id="canvasContainer">
+      <canvas id="myCanvas" width="800" height="800"></canvas>
+    </div>
+    <div class="hint">يمكنك سحب النص بإصبعك لتغيير مكانه</div>
+
+    <div class="controls">
+      <button class="btn btn-blue" onclick="drawCanvas()">تحديث الصورة</button>
+      <button class="btn btn-green" onclick="downloadImage()">حفظ الصورة</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const userTextInput = document.getElementById('userText');
+    const stylesGrid = document.getElementById('stylesGrid');
+    
+    // إحداثيات النص الافتراضية (في المنتصف)
+    let textX = canvas.width / 2;
+    let textY = canvas.height / 2;
+    let isDragging = false;
+    let selectedGradient = null;
+
+    // توليد 24 ستايل (تدرجات لونية مختلفة)
+    const gradients = [
+      ['#ff9a9e', '#fecfef'], ['#a18cd1', '#fbc2eb'], ['#ffecd2', '#fcb69f'], ['#cfd9df', '#e2ebf0'],
+      ['#fdfbfb', '#ebedee'], ['#f6d365', '#fda085'], ['#84fab0', '#8fd3f4'], ['#a1c4fd', '#c2e9fb'],
+      ['#ff9a9e', '#fecfef'], ['#fbc2eb', '#a6c1ee'], ['#fdcbf1', '#e6dee9'], ['#e0c3fc', '#8ec5fc'],
+      ['#4facfe', '#00f2fe'], ['#43e97b', '#38f9d7'], ['#fa709a', '#fee140'], ['#30cfd0', '#330867'],
+      ['#a8edea', '#fed6e3'], ['#5ee7df', '#b490ca'], ['#d299c2', '#fef9d7'], ['#f5576c', '#f093fb'],
+      ['#00c6fb', '#005bea'], ['#ff0844', '#ffb199'], ['#96fbc4', '#f9f586'], ['#c471f5', '#fa71cd']
+    ];
+
+    function createStyleBoxes() {
+      gradients.forEach((grad, index) => {
+        const box = document.createElement('div');
+        box.className = 'style-box';
+        box.style.background = `linear-gradient(135deg, ${grad[0]}, ${grad[1]})`;
+        if(index === 0) {
+          box.classList.add('selected');
+          selectedGradient = grad;
+        }
+        box.onclick = () => {
+          document.querySelectorAll('.style-box').forEach(b => b.classList.remove('selected'));
+          box.classList.add('selected');
+          selectedGradient = grad;
+          drawCanvas();
+        };
+        stylesGrid.appendChild(box);
+      });
+    }
+
+    function drawCanvas() {
+      const text = userTextInput.value.trim() || "اكتب اسمك";
+      
+      // رسم الخلفية
+      if(selectedGradient) {
+        const grd = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        grd.addColorStop(0, selectedGradient[0]);
+        grd.addColorStop(1, selectedGradient[1]);
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // إعدادات النص
+      ctx.font = "bold 80px Tahoma, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      
+      // ظل للنص لإبرازه
+      ctx.shadowColor = "rgba(0,0,0,0.3)";
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 4;
+      ctx.shadowOffsetY = 4;
+      
+      // رسم النص باللون الأبيض
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(text, textX, textY);
+      
+      // إعادة تعيين الظل حتى لا يؤثر على رسمات أخرى مستقبلاً
+      ctx.shadowColor = "transparent";
+    }
+
+    // التعامل مع سحب النص (لمس أو ماوس)
+    function getEventPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      let clientX = e.clientX;
+      let clientY = e.clientY;
+      
+      if(e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      }
+      
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function startDrag(e) {
+      e.preventDefault();
+      isDragging = true;
+      const pos = getEventPos(e);
+      textX = pos.x;
+      textY = pos.y;
+      drawCanvas();
+    }
+
+    function drag(e) {
+      if(!isDragging) return;
+      e.preventDefault();
+      const pos = getEventPos(e);
+      textX = pos.x;
+      textY = pos.y;
+      drawCanvas();
+    }
+
+    function stopDrag() {
+      isDragging = false;
+    }
+
+    canvas.addEventListener('mousedown', startDrag);
+    canvas.addEventListener('mousemove', drag);
+    window.addEventListener('mouseup', stopDrag);
+
+    canvas.addEventListener('touchstart', startDrag, {passive: false});
+    canvas.addEventListener('touchmove', drag, {passive: false});
+    window.addEventListener('touchend', stopDrag);
+
+    // دالة حفظ الصورة
+    function downloadImage() {
+      const text = userTextInput.value.trim() || "design";
+      const link = document.createElement('a');
+      link.download = text + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // التهيئة المبدئية
+    createStyleBoxes();
+    drawCanvas();
+  </script>
+</body>
+</html>
