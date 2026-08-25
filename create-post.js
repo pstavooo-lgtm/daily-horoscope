@@ -15,59 +15,47 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
-// فحص حالة الدخول ومعالجة النتيجة فور تحميل الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-  auth.getRedirectResult().then((result) => {
-    if (result.user) {
-      handleUserLogin(result.user);
-    }
-  }).catch((error) => {
-    console.error("خطأ في إعادة التوجيه:", error.message);
-  });
-});
-
 // مراقب حالة التسجيل المستمر
 auth.onAuthStateChanged((user) => {
+  const authScreen = document.getElementById('auth-screen');
+  const appContent = document.getElementById('app-content');
+
   if (user) {
-    handleUserLogin(user);
+    currentUser = user;
+    if (authScreen) authScreen.style.display = 'none';
+    if (appContent) appContent.style.display = 'block';
+
+    const userImg = document.getElementById('user-profile-img');
+    const userName = document.getElementById('user-profile-name');
+    const userEmail = document.getElementById('user-profile-email');
+
+    if (userImg) userImg.src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    if (userName) userName.innerText = user.displayName || 'مستخدم';
+    if (userEmail) userEmail.innerText = user.email || '';
+
+    if (typeof loadPostsFeed === 'function') loadPostsFeed();
   } else {
     currentUser = null;
-    const authScreen = document.getElementById('auth-screen');
-    const appContent = document.getElementById('app-content');
     if (authScreen) authScreen.style.display = 'block';
     if (appContent) appContent.style.display = 'none';
   }
 });
 
-function handleUserLogin(user) {
-  currentUser = user;
-  const authScreen = document.getElementById('auth-screen');
-  const appContent = document.getElementById('app-content');
-
-  if (authScreen) authScreen.style.display = 'none';
-  if (appContent) appContent.style.display = 'block';
-
-  const userImg = document.getElementById('user-profile-img');
-  const userName = document.getElementById('user-profile-name');
-  const userEmail = document.getElementById('user-profile-email');
-
-  if (userImg) userImg.src = user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-  if (userName) userName.innerText = user.displayName || 'مستخدم';
-  if (userEmail) userEmail.innerText = user.email || '';
-
-  if (typeof loadPostsFeed === 'function') {
-    loadPostsFeed();
-  }
-}
-
+// تسجيل الدخول بواسطة Popup
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithRedirect(provider);
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      console.log("تم تسجيل الدخول بنجاح");
+    })
+    .catch((error) => {
+      alert("خطأ أثناء تسجيل الدخول: " + error.message);
+    });
 }
 
 function logoutGoogle() {
   auth.signOut().then(() => {
-    location.reload();
+    alert("تم تسجيل الخروج بنجاح");
   });
 }
 
