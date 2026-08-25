@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حالات وصور 📸</title>
+  <style>
+    :root {
+      --primary-blue: #1b5e9d;
+      --bg-color: #0b3c5d;
+      --card-bg: #ffffff;
+    }
+    body {
+      background-color: var(--bg-color);
+      font-family: tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      direction: rtl;
+    }
+    /* الشريط العلوي */
+    .top-header {
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .top-header h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .back-btn {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      background: rgba(255,255,255,0.2);
+      padding: 5px 12px;
+      border-radius: 15px;
+    }
+    /* شريط التبويبات الرئيسي */
+    .tabs-nav {
+      background-color: var(--primary-blue);
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      text-align: center;
+      color: #d0e1f9;
+      font-weight: bold;
+      cursor: pointer;
+      border-bottom: 4px solid transparent;
+      transition: 0.3s;
+    }
+    .tab-btn.active {
+      color: #fff;
+      border-bottom: 4px solid #fbc02d;
+    }
+    /* الحاوية الرئيسية للمحتوى */
+    .main-container {
+      max-width: 500px;
+      margin: 10px auto;
+      padding: 0 10px;
+    }
+    /* كارت الخيارات */
+    .options-card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      margin-bottom: 12px;
+    }
+    .options-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #444;
+      font-size: 14px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+    .btn-large {
+      width: 100%;
+      background: #d81b60;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-sub {
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+      color: white;
+      cursor: pointer;
+    }
+    .btn-green { background-color: #2e7d32; }
+    .btn-blue { background-color: #1e88e5; }
+
+    /* أقسام الصفحات */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* مكان استدعى كود المنشورات الخارجي */
+    #posts-feed-container {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- هيدر الصفحة -->
+  <div class="top-header">
+    <a href="index.html" class="back-btn">➔ العودة</a>
+    <h1>صور العامة</h1>
+    <div>❤️</div>
+  </div>
+
+  <!-- شريط الأقسام الثلاثة -->
+  <div class="tabs-nav">
+    <div class="tab-btn" onclick="switchTab('profile', this)">حسابي</div>
+    <div class="tab-btn active" onclick="switchTab('main', this)">الرئيسية</div>
+    <div class="tab-btn" onclick="switchTab('chat', this)">دردشة عامة</div>
+  </div>
+
+  <div class="main-container">
+    
+    <!-- 1. قسم الرئيسية -->
+    <div id="section-main" class="page-section active">
+      
+      <!-- كارت الخيارات (الأزرار الـ 3 المحددة فقط) -->
+      <div class="options-card">
+        <div class="options-title">الخيارات</div>
+        
+        <button class="btn-large" onclick="onNewPostClick()">📷 نشر صورة جديدة</button>
+
+        <div class="btn-grid">
+          <button class="btn-sub btn-green" onclick="toggleSafeMode()">🛡️ تفعيل الوضع الآمن</button>
+          <button class="btn-sub btn-blue" onclick="onMyPostsClick()">🖼️ عرض منشوراتي</button>
+        </div>
+      </div>
+
+      <!-- مكان تغذية المنشورات (معزول لملف JS خارجي) -->
+      <div id="posts-feed-container"></div>
+    </div>
+
+    <!-- 2. قسم حسابي (فارغ جاهز للاستدعاء الخارجي) -->
+    <div id="section-profile" class="page-section">
+      <div id="profile-container"></div>
+    </div>
+
+    <!-- 3. قسم الدردشة العامة (فارغ جاهز للاستدعاء الخارجي) -->
+    <div id="section-chat" class="page-section">
+      <div id="chat-container"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // التنقل بين الأقسام الثلاثة
+    function switchTab(tabName, el) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+
+      el.classList.add('active');
+      document.getElementById('section-' + tabName).classList.add('active');
+    }
+
+    // الأزرار المجهزة للاستدعاءات اللاحقة
+    function onNewPostClick() {
+      console.log("نشر صورة جديدة");
+    }
+
+    function toggleSafeMode() {
+      console.log("تفعيل الوضع الآمن");
+    }
+
+    function onMyPostsClick() {
+      console.log("عرض منشوراتي");
+    }
+  </script>
+
+  <!-- هنا سيتم ربط ملفات الكود الخارجية مستقبلاً -->
+  <!-- <script src="posts.js"></script> -->
+  <!-- <script src="profile.js"></script> -->
+  <!-- <script src="chat.js"></script> -->
+
+</body>
+</html>
