@@ -5,185 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>حالات وصور 📸</title>
   <style>
-    :root {
-      --primary-blue: #1b5e9d;
-      --bg-color: #0b3c5d;
-      --card-bg: #ffffff;
-    }
+    :root { --primary-blue: #1b5e9d; --bg-color: #0b3c5d; }
     * { box-sizing: border-box; }
-    body {
-      background-color: var(--bg-color);
-      font-family: tahoma, sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #333;
-      direction: rtl;
-    }
-    .top-header {
-      background-color: var(--primary-blue);
-      color: white;
-      padding: 12px 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
+    body { background-color: var(--bg-color); font-family: tahoma, sans-serif; margin: 0; padding: 0; color: #333; direction: rtl; }
+    .top-header { background-color: var(--primary-blue); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
     .top-header h1 { margin: 0; font-size: 18px; }
-    .back-btn {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-      background: rgba(255,255,255,0.2);
-      padding: 5px 12px;
-      border-radius: 15px;
-    }
-    .tabs-nav {
-      background-color: var(--primary-blue);
-      display: flex;
-      justify-content: space-around;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 12px 0;
-      text-align: center;
-      color: #d0e1f9;
-      font-weight: bold;
-      cursor: pointer;
-      border-bottom: 4px solid transparent;
-      transition: 0.3s;
-    }
-    .tab-btn.active {
-      color: #fff;
-      border-bottom: 4px solid #fbc02d;
-    }
-    .main-container {
-      max-width: 500px;
-      margin: 10px auto;
-      padding: 0 10px;
-    }
-    .options-card {
-      background: white;
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      margin-bottom: 12px;
-    }
-    .options-title {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #444;
-      font-size: 14px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 5px;
-    }
-    .btn-large {
-      width: 100%;
-      background: #d81b60;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-      margin-bottom: 8px;
-    }
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .btn-sub {
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 13px;
-      color: white;
-      cursor: pointer;
-    }
-    .btn-green { background-color: #2e7d32; }
-    .btn-blue { background-color: #1e88e5; }
-    
-    /* فورم النشر */
-    .post-form-card {
-      background: #fff;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      display: none;
-    }
-    .post-form-card textarea {
-      width: 100%;
-      height: 70px;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-family: inherit;
-      resize: none;
-    }
-    .post-form-card input[type="file"] {
-      margin: 10px 0;
-      width: 100%;
-    }
+    .back-btn { color: white; text-decoration: none; font-weight: bold; font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; }
+    .tabs-nav { background-color: var(--primary-blue); display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); }
+    .tab-btn { flex: 1; padding: 12px 0; text-align: center; color: #d0e1f9; font-weight: bold; cursor: pointer; border-bottom: 4px solid transparent; }
+    .tab-btn.active { color: #fff; border-bottom: 4px solid #fbc02d; }
+    .main-container { max-width: 500px; margin: 10px auto; padding: 0 10px; }
+    .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 12px; }
+    .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; color: white; }
+    .btn-pink { background: #d81b60; } .btn-blue { background: #1e88e5; } .btn-green { background: #2e7d32; } .btn-red { background: #c62828; } .btn-gray { background: #757575; }
+    .page-section { display: none; } .page-section.active { display: block; }
 
-    /* كروت المنشورات */
-    .post-card {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    /* النافذة العائمة (Modal) */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+      display: none; justify-content: center; align-items: center; z-index: 1000;
+      padding: 15px;
     }
-    .post-header {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      gap: 10px;
+    .modal-box {
+      background: white; width: 100%; max-width: 450px; border-radius: 12px;
+      padding: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); animation: fadeIn 0.2s ease-in-out;
     }
-    .post-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #ccc;
-      object-fit: cover;
-    }
-    .post-user-info {
-      display: flex;
-      flex-direction: column;
-    }
-    .post-author { font-weight: bold; font-size: 14px; }
-    .post-time { font-size: 11px; color: #777; }
-    .post-text { padding: 0 10px 10px 10px; font-size: 14px; line-height: 1.5; color: #222; }
-    .post-img { width: 100%; max-height: 400px; object-fit: cover; display: block; }
-    .post-footer {
-      display: flex;
-      justify-content: space-around;
-      border-top: 1px solid #eee;
-      padding: 8px 0;
-      background: #fafafa;
-    }
-    .action-btn {
-      background: none;
-      border: none;
-      font-size: 14px;
-      font-weight: bold;
-      color: #555;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .page-section { display: none; }
-    .page-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 12px; }
+    .modal-header h3 { margin: 0; font-size: 16px; color: #1b5e9d; }
+    .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: #888; }
+    .post-textarea { width: 100%; height: 90px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; resize: none; font-size: 14px; }
+    .char-counter { text-align: left; font-size: 11px; color: #777; margin-top: 2px; margin-bottom: 10px; }
+    .img-preview-container { position: relative; margin-top: 8px; display: none; }
+    .img-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+    .remove-img-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
   </style>
 
-  <!-- تحميل مكتبات Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
@@ -194,164 +55,66 @@
     <div>❤️</div>
   </div>
 
-  <div class="tabs-nav">
+  <div class="tabs-nav" id="main-tabs" style="display:none;">
     <div class="tab-btn" onclick="switchTab('profile', this)">حسابي</div>
     <div class="tab-btn active" onclick="switchTab('main', this)">الرئيسية</div>
     <div class="tab-btn" onclick="switchTab('chat', this)">دردشة عامة</div>
   </div>
 
   <div class="main-container">
-    <div id="section-main" class="page-section active">
-      
-      <div class="options-card">
-        <div class="options-title">الخيارات</div>
-        <button class="btn-large" onclick="togglePostForm()">📷 نشر صورة جديدة</button>
-        <div class="btn-grid">
-          <button class="btn-sub btn-green" onclick="toggleSafeMode()">🛡️ تفعيل الوضع الآمن</button>
-          <button class="btn-sub btn-blue" onclick="filterMyPosts()">🖼️ عرض منشوراتي</button>
+    <div id="auth-container"></div>
+
+    <div id="section-main" class="page-section">
+      <div class="card">
+        <div style="text-align:center; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">الخيارات</div>
+        <button class="btn btn-pink" onclick="openPostModal()">📷 نشر صورة جديدة</button>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px;">
+          <button class="btn btn-green" onclick="alert('الوضع الآمن مفعل تلقائياً')">🛡️ تفعيل الوضع الآمن</button>
+          <button class="btn btn-blue" onclick="filterMyPosts()">🖼️ عرض منشوراتي</button>
         </div>
       </div>
 
-      <!-- واجهة إضافة منشور -->
-      <div id="post-form" class="post-form-card">
-        <textarea id="post-text-input" placeholder="اكتب وصفاً أو حالة مع الصورة..."></textarea>
-        <input type="file" id="post-file-input" accept="image/*">
-        <button class="btn-large" style="background:#2e7d32; margin-bottom:0;" onclick="submitPost()">نشر الآن 🚀</button>
-      </div>
-
-      <!-- حاوية المنشورات الحية -->
-      <div id="posts-feed-container">
-        <div style="text-align:center; color:white; padding:20px;">جاري تحميل المنشورات...</div>
-      </div>
+      <div id="posts-feed-container"></div>
     </div>
 
     <div id="section-profile" class="page-section">
-      <div style="background:white; padding:20px; border-radius:8px; text-align:center;">
-        <h3>صفحة حسابي الشخصي</h3>
-        <p>سيتم ربط إدارة الملف الشخصي بالكامل بالخطوة القادمة.</p>
-      </div>
+      <div id="profile-container"></div>
     </div>
 
     <div id="section-chat" class="page-section">
-      <div style="background:white; padding:20px; border-radius:8px; text-align:center;">
-        <h3>الدردشة العامة الحية</h3>
-        <p>سيتم تفعيل الشات المباشر بالخطوة القادمة.</p>
+      <div id="chat-container"></div>
+    </div>
+  </div>
+
+  <!-- النافذة العائمة للنشر -->
+  <div id="post-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>إنشاء منشور جديد</h3>
+        <button class="close-modal" onclick="closePostModal()">✖</button>
+      </div>
+
+      <textarea id="modal-text-input" class="post-textarea" placeholder="اكتب حالة أو وصفاً (300 حرف كحد أقصى)..." maxlength="300" oninput="updateCharCount()"></textarea>
+      <div id="char-counter" class="char-counter">متبقي 300 حرف</div>
+
+      <input type="file" id="modal-file-input" accept="image/*" style="display:none;" onchange="handleImagePreview(event)">
+      <button class="btn btn-blue" style="font-size:13px; padding:8px;" onclick="document.getElementById('modal-file-input').click()">🖼️ اختيار صورة من الجهاز</button>
+
+      <div id="img-preview-box" class="img-preview-container">
+        <img id="modal-img-preview" class="img-preview">
+        <button class="remove-img-btn" onclick="removeSelectedImage()">✖</button>
+      </div>
+
+      <div class="modal-actions">
+        <button id="submit-post-btn" class="btn btn-green" onclick="submitNewPost()">نشر الآن 🚀</button>
+        <button class="btn btn-gray" onclick="closePostModal()">إلغاء</button>
       </div>
     </div>
   </div>
 
-  <script>
-    // تهيئة Firebase البيانات
-    const firebaseConfig = {
-      apiKey: "AIzaSyBO2BN1GKnCEavALSt87PooM0eG9YC9oxY",
-      authDomain: "horoscope-app-c1226.firebaseapp.com",
-      databaseURL: "https://horoscope-app-c1226-default-rtdb.firebaseio.com",
-      projectId: "horoscope-app-c1226",
-      storageBucket: "horoscope-app-c1226.firebasestorage.app",
-      messagingSenderId: "147456145049",
-      appId: "1:147456145049:web:3ea1e96783ea730828ea08"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    function switchTab(tabName, el) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-      el.classList.add('active');
-      document.getElementById('section-' + tabName).classList.add('active');
-    }
-
-    function togglePostForm() {
-      const form = document.getElementById('post-form');
-      form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    }
-
-    // دالة نشر الصورة
-    function submitPost() {
-      const text = document.getElementById('post-text-input').value;
-      const fileInput = document.getElementById('post-file-input');
-      const file = fileInput.files[0];
-
-      if(!text && !file) {
-        alert("يرجى كتابة نص أو اختيار صورة للنشر!");
-        return;
-      }
-
-      const savePost = (imgBase64 = "") => {
-        const newPostRef = db.ref('posts').push();
-        newPostRef.set({
-          author: "مستخدم",
-          text: text,
-          image: imgBase64,
-          timestamp: Date.now(),
-          likes: 0
-        }).then(() => {
-          document.getElementById('post-text-input').value = "";
-          fileInput.value = "";
-          togglePostForm();
-        });
-      };
-
-      if(file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          savePost(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        savePost();
-      }
-    }
-
-    // جلب وحفظ التحديثات الحية للمنشورات تلقائياً
-    db.ref('posts').on('value', (snapshot) => {
-      const container = document.getElementById('posts-feed-container');
-      container.innerHTML = "";
-      const data = snapshot.val();
-
-      if(!data) {
-        container.innerHTML = `<div style="text-align:center; color:white; padding:20px;">لا توجد منشورات حالياً. كن أول من ينشر!</div>`;
-        return;
-      }
-
-      const postsArray = Object.entries(data).reverse();
-
-      postsArray.forEach(([key, post]) => {
-        const postCard = document.createElement('div');
-        postCard.className = 'post-card';
-        postCard.innerHTML = `
-          <div class="post-header">
-            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="post-avatar">
-            <div class="post-user-info">
-              <span class="post-author">${post.author || 'مستخدم'}</span>
-              <span class="post-time">${new Date(post.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</span>
-            </div>
-          </div>
-          ${post.text ? `<div class="post-text">${post.text}</div>` : ''}
-          ${post.image ? `<img src="${post.image}" class="post-img">` : ''}
-          <div class="post-footer">
-            <button class="action-btn" onclick="likePost('${key}', ${post.likes || 0})">👍 ${post.likes || 0} إعجاب</button>
-            <button class="action-btn">💬 تعليق</button>
-          </div>
-        `;
-        container.appendChild(postCard);
-      });
-    });
-
-    function likePost(id, currentLikes) {
-      db.ref('posts/' + id).update({
-        likes: currentLikes + 1
-      });
-    }
-
-    function toggleSafeMode() {
-      alert("تم تفعيل الوضع الآمن لمنع المحتوى غير اللائق.");
-    }
-
-    function filterMyPosts() {
-      alert("جاري تصفية منشوراتك الشخصية فقط.");
-    }
-  </script>
+  <script src="profile.js"></script>
+  <script src="create-post.js"></script>
+  <script src="feed.js"></script>
+  <script src="chat.js"></script>
 </body>
-</html> 
+</html>
