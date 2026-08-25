@@ -16,6 +16,7 @@
     .tab-btn.active { color: #fff; border-bottom: 4px solid #fbc02d; }
     .main-container { max-width: 500px; margin: 10px auto; padding: 0 10px; }
     .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 12px; }
+    .input-field { width: 100%; padding: 10px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
     .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; color: white; }
     .btn-pink { background: #d81b60; } .btn-blue { background: #1e88e5; } .btn-green { background: #2e7d32; } .btn-red { background: #c62828; } .btn-gray { background: #757575; }
     .page-section { display: none; } .page-section.active { display: block; }
@@ -29,9 +30,8 @@
     }
     .modal-box {
       background: white; width: 100%; max-width: 450px; border-radius: 12px;
-      padding: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); animation: fadeIn 0.2s ease-in-out;
+      padding: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
     }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 12px; }
     .modal-header h3 { margin: 0; font-size: 16px; color: #1b5e9d; }
     .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: #888; }
@@ -43,6 +43,7 @@
     .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
   </style>
 
+  <!-- مكتبات السيرفر -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -62,9 +63,11 @@
   </div>
 
   <div class="main-container">
+    <!-- حاوية واجهة التسجيل -->
     <div id="auth-container"></div>
 
-    <div id="section-main" class="page-section">
+    <!-- قسم الرئيسية -->
+    <div id="section-main" class="page-section active">
       <div class="card">
         <div style="text-align:center; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">الخيارات</div>
         <button class="btn btn-pink" onclick="openPostModal()">📷 نشر صورة جديدة</button>
@@ -77,12 +80,14 @@
       <div id="posts-feed-container"></div>
     </div>
 
+    <!-- قسم حسابي -->
     <div id="section-profile" class="page-section">
       <div id="profile-container"></div>
     </div>
 
+    <!-- قسم الدردشة -->
     <div id="section-chat" class="page-section">
-      <div id="chat-container"></div>
+      <div class="card" style="text-align:center; color:#666;">قسم الدردشة قيد التطوير</div>
     </div>
   </div>
 
@@ -115,6 +120,5 @@
   <script src="profile.js"></script>
   <script src="create-post.js"></script>
   <script src="feed.js"></script>
-  <script src="chat.js"></script>
 </body>
 </html>
