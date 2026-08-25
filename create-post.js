@@ -1,9 +1,25 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyBO2BN1GKnCEavALSt87PooM0eG9YC9oxY",
+  authDomain: "horoscope-app-c1226.firebaseapp.com",
+  databaseURL: "https://horoscope-app-c1226-default-rtdb.firebaseio.com",
+  projectId: "horoscope-app-c1226",
+  storageBucket: "horoscope-app-c1226.firebasestorage.app",
+  messagingSenderId: "147456145049",
+  appId: "1:147456145049:web:3ea1e96783ea730828ea08"
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+let currentUser = null;
 let selectedImageBase64 = "";
 
-function openPostModal() {
-  document.getElementById('post-modal').style.display = 'flex';
-}
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+});
 
+function openPostModal() { document.getElementById('post-modal').style.display = 'flex'; }
 function closePostModal() {
   document.getElementById('post-modal').style.display = 'none';
   document.getElementById('modal-text-input').value = "";
@@ -15,7 +31,6 @@ function updateCharCount() {
   const input = document.getElementById('modal-text-input');
   const counter = document.getElementById('char-counter');
   const remaining = 300 - input.value.length;
-  
   counter.innerText = `متبقي ${remaining} حرف`;
   counter.style.color = remaining < 30 ? "#c62828" : "#777";
 }
@@ -23,7 +38,6 @@ function updateCharCount() {
 function handleImagePreview(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = function(e) {
     selectedImageBase64 = e.target.result;
@@ -41,24 +55,16 @@ function removeSelectedImage() {
 }
 
 function submitNewPost() {
-  if (!currentUser) {
-    alert("يرجى تسجيل الدخول أولاً!");
-    return;
-  }
-
   const text = document.getElementById('modal-text-input').value.trim();
-  if (!text && !selectedImageBase64) {
-    alert("يرجى كتابة نص أو اختيار صورة للنشر!");
-    return;
-  }
+  if (!text && !selectedImageBase64) { alert("يرجى كتابة نص أو اختيار صورة!"); return; }
 
-  // التحقق من حد الـ 10 دقائق
-  const lastPostTime = localStorage.getItem('last_post_time_' + currentUser.uid);
+  const userId = currentUser ? currentUser.uid : "anonymous_user";
+  const lastPostTime = localStorage.getItem('last_post_time_' + userId);
   const now = Date.now();
 
   if (lastPostTime && (now - lastPostTime < 10 * 60 * 1000)) {
     const minutesLeft = Math.ceil((10 * 60 * 1000 - (now - lastPostTime)) / (1000 * 60));
-    alert(`عذراً، لحماية المنصة من النشر المتكرر يمكنك النشر مجدداً بعد ${minutesLeft} دقائق.`);
+    alert(`عذراً، يمكنك النشر مجدداً بعد ${minutesLeft} دقائق.`);
     return;
   }
 
@@ -66,28 +72,21 @@ function submitNewPost() {
   submitBtn.disabled = true;
   submitBtn.innerText = "جاري النشر...";
 
-  db.ref('users/' + currentUser.uid).once('value', (snap) => {
-    const userData = snap.val() || {};
-    const authorName = userData.name || currentUser.displayName || "مستخدم";
-    const authorPhoto = userData.photo || currentUser.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-
-    db.ref('posts').push({
-      uid: currentUser.uid,
-      author: authorName,
-      avatar: authorPhoto,
-      text: text,
-      image: selectedImageBase64,
-      timestamp: Date.now(),
-      likes: 0
-    }).then(() => {
-      localStorage.setItem('last_post_time_' + currentUser.uid, Date.now());
-      submitBtn.disabled = false;
-      submitBtn.innerText = "نشر الآن 🚀";
-      closePostModal();
-    }).catch(err => {
-      alert("حدث خطأ أثناء النشر: " + err.message);
-      submitBtn.disabled = false;
-      submitBtn.innerText = "نشر الآن 🚀";
-    });
+  db.ref('posts').push({
+    uid: userId,
+    author: currentUser ? (currentUser.displayName || "مستخدم") : "زائر",
+    avatar: currentUser ? (currentUser.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png") : "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    text: text,
+    image: selectedImageBase64,
+    timestamp: now
+  }).then(() => {
+    localStorage.setItem('last_post_time_' + userId, now);
+    submitBtn.disabled = false;
+    submitBtn.innerText = "نشر الآن 🚀";
+    closePostModal();
+  }).catch(err => {
+    alert("خطأ أثناء النشر: " + err.message);
+    submitBtn.disabled = false;
+    submitBtn.innerText = "نشر الآن 🚀";
   });
 }
