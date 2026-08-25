@@ -63,8 +63,8 @@
   </div>
 
   <div class="main-container">
-    <!-- شاشة تسجيل الدخول بالمستعرض عند فتح الصفحة -->
-    <div id="auth-screen" class="card">
+    <!-- شاشة تسجيل الدخول (مخفية تلقائياً لمنع الرمشة) -->
+    <div id="auth-screen" class="card" style="display:none;">
       <h3 style="margin-top:0; color:#1b5e9d;">مرحباً بك في حالات وصور 👋</h3>
       <p style="color:#666; font-size:14px;">يتطلب استخدام هذا القسم تسجيل الدخول باستخدام حساب جوجل الخاص بك لاستعراض ونشر الصور.</p>
       <button class="google-btn" onclick="loginWithGoogle()">
@@ -73,7 +73,7 @@
       </button>
     </div>
 
-    <!-- المحتوى الكامل (مخفي حتى يتم تسجيل الدخول) -->
+    <!-- المحتوى الكامل (مخفي حتى يكتمل الفحص) -->
     <div id="app-content" style="display:none;">
       <div class="tabs-nav" id="main-tabs" style="margin-bottom:12px; border-radius:8px;">
         <div class="tab-btn" onclick="switchTab('profile', this)">حسابي</div>
