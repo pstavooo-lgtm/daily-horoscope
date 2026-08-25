@@ -9,7 +9,7 @@ function loadPostsFeed() {
     const data = snapshot.val();
     
     if (!data) {
-      container.innerHTML = `<div style="text-align:center; color:white; padding:20px;">لا توجد منشورات حالياً.</div>`;
+      container.innerHTML = `<div style="text-align:center; color:white; padding:20px;">لا توجد منشورات حالياً. كن أول من ينشر!</div>`;
       return;
     }
 
@@ -33,8 +33,7 @@ function loadPostsFeed() {
 }
 
 function filterMyPosts() {
-  if (typeof db === 'undefined') return;
-  const userId = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.uid : "anonymous_user";
+  if (typeof db === 'undefined' || !currentUser) return;
 
   db.ref('posts').once('value', (snapshot) => {
     const container = document.getElementById('posts-feed-container');
@@ -44,7 +43,7 @@ function filterMyPosts() {
     const data = snapshot.val() || {};
 
     Object.entries(data).reverse().forEach(([key, post]) => {
-      if (post.uid === userId) {
+      if (post.uid === currentUser.uid) {
         const card = document.createElement('div');
         card.className = 'post-card';
         card.innerHTML = `
@@ -63,8 +62,3 @@ function filterMyPosts() {
     });
   });
 }
-
-// تشغيل جلب المنشورات تلقائياً عند تحميل الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-  loadPostsFeed();
-});
