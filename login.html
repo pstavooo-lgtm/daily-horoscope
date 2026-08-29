@@ -8,9 +8,9 @@
     body { background-color: #0b3c5d; font-family: tahoma, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; direction: rtl; }
     .login-card { background: white; border-radius: 12px; padding: 25px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
     .google-btn { background: #4285f4; color: white; font-weight: bold; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; justify-content: center; width: 100%; margin-top: 15px; }
+    .loading-msg { display: none; color: #1b5e9d; font-weight: bold; margin-top: 15px; }
   </style>
 
-  <!-- مكتبات Firebase الأساسية -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -20,17 +20,33 @@
   <div class="login-card">
     <h3 style="color:#1b5e9d; margin-top:0;">تسجيل الدخول 👋</h3>
     <p style="color:#666; font-size:14px;">يرجى تسجيل الدخول باستخدام حساب Google لتتمكن من الوصول لصفحة حالات وصور.</p>
-    <button class="google-btn" onclick="loginWithGoogle()">
+    
+    <button id="btn-login" class="google-btn" onclick="loginWithGoogle()">
       <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" width="18" height="18">
       تسجيل الدخول بواسطة Google
     </button>
+
+    <div id="loading" class="loading-msg">جاري التحقق وتسجيل الدخول... ⏳</div>
   </div>
 
   <script src="auth.js"></script>
   <script>
-    // فحص فور فتح الصفحة: إذا كان المستخدم مسجل دخول بالفعل، ينقله فوراً
+    // 1. معالجة النتيجة القادمة من توجيه جوجل فور تحميل الصفحة
+    auth.getRedirectResult().then((result) => {
+      if (result.user) {
+        localStorage.setItem("isLoggedIn", "true");
+        window.location.href = "cases-photos.html";
+      }
+    }).catch((error) => {
+      console.error("خطأ التسجيل:", error);
+    });
+
+    // 2. مراقبة التغيير في الحالة
     auth.onAuthStateChanged((user) => {
       if (user) {
+        document.getElementById("btn-login").style.display = "none";
+        document.getElementById("loading").style.display = "block";
+        localStorage.setItem("isLoggedIn", "true");
         window.location.href = "cases-photos.html";
       }
     });
