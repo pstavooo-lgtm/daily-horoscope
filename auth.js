@@ -15,22 +15,19 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.database();
 
-// دالة تسجيل الدخول النافذة المنبثقة
+// ضبط حفظ جلسة الدخول دائمياً في المتصفح
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+// دالة تسجيل الدخول بواسطة جوجل
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .then((result) => {
-      // بعد الدخول بنجاح التحويل التلقائي لصفحة حالات وصور
-      window.location.href = "cases-photos.html";
-    })
-    .catch((error) => {
-      console.error("خطأ في تسجيل الدخول:", error);
-      alert("حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة مرة أخرى.");
-    });
+  auth.signInWithRedirect(provider);
 }
 
+// دالة الخروج
 function logoutGoogle() {
   auth.signOut().then(() => {
+    localStorage.removeItem("isLoggedIn");
     window.location.href = "index.html";
   });
 }
