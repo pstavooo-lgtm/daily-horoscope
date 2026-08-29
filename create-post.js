@@ -15,16 +15,18 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
-// معالجة نتيجة الـ Redirect فور العودة للصفحة
+// 1. معالجة التوجيه عند العودة من تسجيل الدخول + تحديث الصفحة تلقائياً
 auth.getRedirectResult().then((result) => {
   if (result.user) {
-    console.log("تم تسجيل الدخول بنجاح بعد التوجيه");
+    console.log("تم تسجيل الدخول بنجاح عبر التوجيه");
+    // إعادة تحميل الصفحة لضمان تحديث الواجهة والـ Feed بنظافة
+    window.location.reload();
   }
 }).catch((error) => {
   console.error("خطأ التوجيه:", error);
 });
 
-// مراقبة الدخول
+// 2. مراقبة حالة المستخدم والتحديث المستمر
 auth.onAuthStateChanged((user) => {
   const authScreen = document.getElementById('auth-screen');
   const appContent = document.getElementById('app-content');
@@ -50,14 +52,17 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+// 3. تسجيل الدخول بواسطة Google
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithRedirect(provider);
 }
 
+// 4. تسجيل الخروج + إعادة تحميل الصفحة تلقائياً
 function logoutGoogle() {
   auth.signOut().then(() => {
-    location.reload();
+    // تحديث الصفحة تلقائياً لتصفير كافّة البيانات والحالات
+    window.location.reload();
   });
 }
 
