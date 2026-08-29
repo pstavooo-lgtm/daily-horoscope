@@ -1,19 +1,27 @@
-// 1. دالة يفحص بها الزر قبل فتح حالات وصور
+// دالة فتح صفحة حالات وصور من الصفحة الرئيسية
 function goToCasesAndPhotos() {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      window.location.href = "cases-photos.html";
-    } else {
-      window.location.href = "login.html";
-    }
-  });
+  const localAuth = localStorage.getItem("isLoggedIn");
+  if (localAuth === "true" || (firebase.auth().currentUser)) {
+    window.location.href = "cases-photos.html";
+  } else {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        localStorage.setItem("isLoggedIn", "true");
+        window.location.href = "cases-photos.html";
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+  }
 }
 
-// 2. دالة لحماية صفحة حالات وصور من الدخول المباشر
+// دالة حماية صفحة حالات وصور
 function protectCasesPage() {
   firebase.auth().onAuthStateChanged((user) => {
-    if (!user) {
+    if (!user && localStorage.getItem("isLoggedIn") !== "true") {
       window.location.href = "login.html";
+    } else if (user) {
+      localStorage.setItem("isLoggedIn", "true");
     }
   });
 }
