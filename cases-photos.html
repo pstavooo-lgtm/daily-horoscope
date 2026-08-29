@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>حالات وصور 🖼️</title>
+  
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
   <style>
     :root {
       --bg-color: #0d5c48;
       --header-bg: #1e63b8;
+      --card-bg: #ffffff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: tahoma, arial, sans-serif; }
@@ -48,25 +53,78 @@
       border-radius: 5px;
     }
 
-    .card {
+    .tabs-container {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .tab-btn {
+      background: #ffffff22;
+      color: white;
+      border: 1px solid #ffffff44;
+      padding: 8px 15px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .tab-btn.active {
+      background: #ff9800;
+      border-color: #ff9800;
+      color: white;
+    }
+
+    .posts-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .post-card {
       background: white;
       border-radius: 12px;
       padding: 15px;
-      margin-bottom: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      text-align: center;
     }
 
-    .card img {
+    .post-card img {
       width: 100%;
       border-radius: 8px;
       margin-bottom: 10px;
+      max-height: 350px;
+      object-fit: cover;
     }
 
-    .card p {
+    .post-text {
       color: #333;
       font-size: 15px;
       line-height: 1.6;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    .post-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .btn-download {
+      background: #4caf50;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -78,12 +136,86 @@
       <a href="index.html" class="back-btn">➔ الرئيسية</a>
     </div>
 
-    <!-- محتوى حالات وصور -->
-    <div class="card">
-      <p>أهلاً بك في قسم الحالات والصور! هنا يمكنك عرض وتحميل أجمل الحالات والعبارات.</p>
+    <!-- أقسام الحالات -->
+    <div class="tabs-container">
+      <button class="tab-btn active" onclick="filterCategory('all', this)">الكل</button>
+      <button class="tab-btn" onclick="filterCategory('حب', this)">❤️ حب وغرام</button>
+      <button class="tab-btn" onclick="filterCategory('حزن', this)">💔 عتاب وحزن</button>
+      <button class="tab-btn" onclick="filterCategory('دينية', this)">🌙 إسلاميات</button>
+      <button class="tab-btn" onclick="filterCategory('كبرياء', this)">🔥 كبرياء وشموخ</button>
     </div>
 
+    <!-- حاوية المنشورات التي تُجلب من Firebase Database -->
+    <div id="posts-list" class="posts-container">
+      <p style="color:white; text-align:center;">جاري تحميل المنشورات... ⏳</p>
+    </div>
   </div>
+
+  <script>
+    // إعدادات القاعدة لجلب المنشورات فقط دون Auth
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO2BN1GKnCEavALSt87PooM0eG9YC9oxY",
+      authDomain: "horoscope-app-c1226.firebaseapp.com",
+      databaseURL: "https://horoscope-app-c1226-default-rtdb.firebaseio.com",
+      projectId: "horoscope-app-c1226",
+      storageBucket: "horoscope-app-c1226.firebasestorage.app",
+      messagingSenderId: "147456145049",
+      appId: "1:147456145049:web:3ea1e96783ea730828ea08"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const db = firebase.database();
+    let allPosts = [];
+
+    // جلب البيانات مباشرة من Realtime Database
+    db.ref('cases_photos').on('value', (snapshot) => {
+      const data = snapshot.val();
+      const container = document.getElementById('posts-list');
+      container.innerHTML = '';
+
+      if (!data) {
+        container.innerHTML = '<p style="color:white; text-align:center;">لا توجد منشورات حالياً.</p>';
+        return;
+      }
+
+      allPosts = Object.values(data);
+      renderPosts(allPosts);
+    });
+
+    function renderPosts(posts) {
+      const container = document.getElementById('posts-list');
+      container.innerHTML = '';
+
+      posts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.innerHTML = `
+          ${post.image ? `<img src="${post.image}" alt="صورة">` : ''}
+          ${post.text ? `<p class="post-text">${post.text}</p>` : ''}
+          <div class="post-actions">
+            <span>🏷️ ${post.category || 'عام'}</span>
+            ${post.image ? `<a href="${post.image}" target="_blank" download class="btn-download">تحميل الصورة 📥</a>` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (cat === 'all') {
+        renderPosts(allPosts);
+      } else {
+        const filtered = allPosts.filter(p => p.category === cat);
+        renderPosts(filtered);
+      }
+    }
+  </script>
 
 </body>
 </html>
