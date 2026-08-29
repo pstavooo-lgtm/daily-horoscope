@@ -204,25 +204,7 @@
     }
 
     .stat-title { font-weight: bold; color: #111; }
-
-    [data-netlify-badge], 
-    .netlify-badge, 
-    #netlify-badge,
-    iframe[src*="netlify"], 
-    div[class*="netlify"],
-    net-lify-drawer,
-    #net-lify-drawer,
-    div[style*="fixed"][style*="bottom"] {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
   </style>
-
-  <!-- استدعاء مكتبات Firebase أولاً -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -238,8 +220,8 @@
         <div class="box-title">:: خيارات سريعة ::</div>
         <div class="quick-grid">
           <a href="name-photo.html" class="btn btn-green">اسمك بصورة</a>
-          <!-- زر حالات وصور مرتبط بدالة الفحص مباشرة -->
-          <button onclick="goToCasesAndPhotos()" class="btn btn-blue">حالات و صور</button>
+          <!-- فتح مباشر بدون فحص تسجيل دخول -->
+          <a href="cases-photos.html" class="btn btn-blue">حالات و صور</a>
           <a href="love-calc.html" class="btn btn-pink">مقياس الحب</a>
           <a href="find-zodiac.html" class="btn btn-orange">معرفة برجك</a>
           <a href="compatibility.html" class="btn btn-teal">توافق الابراج</a>
@@ -371,10 +353,6 @@
     </div>
 
   </div>
-
-  <!-- استدعاء ملفات الـ JavaScript للحساب والفحص -->
-  <script src="auth.js"></script>
-  <script src="check-auth.js"></script>
 
   <script>
     let allData = {};
