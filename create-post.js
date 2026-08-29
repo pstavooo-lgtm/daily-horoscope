@@ -15,7 +15,16 @@ const db = firebase.database();
 let currentUser = null;
 let selectedImageBase64 = "";
 
-// مراقبة الدخول والتحديث السلس للواجهة بدون رمشة
+// معالجة نتيجة الـ Redirect فور العودة للصفحة
+auth.getRedirectResult().then((result) => {
+  if (result.user) {
+    console.log("تم تسجيل الدخول بنجاح بعد التوجيه");
+  }
+}).catch((error) => {
+  console.error("خطأ التوجيه:", error);
+});
+
+// مراقبة الدخول
 auth.onAuthStateChanged((user) => {
   const authScreen = document.getElementById('auth-screen');
   const appContent = document.getElementById('app-content');
