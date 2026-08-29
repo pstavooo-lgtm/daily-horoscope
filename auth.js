@@ -1,4 +1,3 @@
-// تهيئة Firebase والحسابات
 const firebaseConfig = {
   apiKey: "AIzaSyBO2BN1GKnCEavALSt87PooM0eG9YC9oxY",
   authDomain: "horoscope-app-c1226.firebaseapp.com",
@@ -9,13 +8,26 @@ const firebaseConfig = {
   appId: "1:147456145049:web:3ea1e96783ea730828ea08"
 };
 
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+// 1. تهيئة Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 const auth = firebase.auth();
 const db = firebase.database();
 
-let currentUser = null;
+var currentUser = null;
 
-// مراقبة حالة تسجيل الدخول
+// 2. معالجة نتيجة التوجيه فور التحميل
+auth.getRedirectResult().then((result) => {
+  if (result && result.user) {
+    console.log("تم تسجل الدخول بنجاح");
+  }
+}).catch((error) => {
+  console.error("خطأ في التوجيه:", error);
+});
+
+// 3. مراقبة حالة الدخول وإظهار الواجهة المناسبة
 auth.onAuthStateChanged((user) => {
   const authScreen = document.getElementById('auth-screen');
   const appContent = document.getElementById('app-content');
@@ -33,8 +45,9 @@ auth.onAuthStateChanged((user) => {
     if (userName) userName.innerText = user.displayName || 'مستخدم';
     if (userEmail) userEmail.innerText = user.email || '';
 
-    // استدعاء عرض المنشورات بعد التأكد من وجود الحساب
-    if (typeof loadPostsFeed === 'function') loadPostsFeed();
+    if (typeof loadPostsFeed === 'function') {
+      loadPostsFeed();
+    }
   } else {
     currentUser = null;
     if (authScreen) authScreen.style.display = 'block';
@@ -42,13 +55,13 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// تسجيل الدخول بواسطة Google
+// 4. دالة تسجيل الدخول
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithRedirect(provider);
 }
 
-// تسجيل الخروج مع تحديث الصفحة تلقائياً
+// 5. دالة تسجيل الخروج
 function logoutGoogle() {
   auth.signOut().then(() => {
     window.location.reload();
